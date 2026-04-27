@@ -9,7 +9,7 @@ import json
 
 st.set_page_config(
     page_title="Heart Disease Prediction System",
-    page_icon="",
+    page_icon="❤️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -34,137 +34,218 @@ def save_users(users):
 
 USERS = load_users()
 
+# Clean white background theme with larger fonts
 st.markdown("""
 <style>
-    /* Main Background */
+    /* Main Background - Clean White */
     .stApp { 
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+        background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
     }
     
     html, body { 
-        font-size: 16px; 
+        font-size: 18px; 
     }
     
     /* Headers */
     h1 { 
-        font-size: 36px; 
-        font-weight: bold; 
-        color: white;
+        font-size: 52px !important; 
+        font-weight: 800 !important; 
+        color: #1e3c72 !important;
+        margin-bottom: 20px;
     }
     h2 { 
-        font-size: 28px; 
-        font-weight: bold; 
-        color: #2c3e50;
+        font-size: 40px !important; 
+        font-weight: 700 !important; 
+        color: #2c3e50 !important;
+        margin-bottom: 20px;
     }
     h3 { 
-        font-size: 24px; 
-        font-weight: bold; 
-        color: #e74c3c;
+        font-size: 32px !important; 
+        font-weight: 600 !important; 
+        color: #e74c3c !important;
+        margin-bottom: 15px;
+    }
+    h4 {
+        font-size: 26px !important;
+        font-weight: 600 !important;
+        color: #34495e !important;
     }
     
-    /* Labels */
-    .stTextInput label, .stNumberInput label, .stSelectbox label { 
-        font-size: 18px; 
-        font-weight: 600; 
-        color: #2c3e50; 
+    /* Labels - LARGER */
+    .stTextInput label, .stNumberInput label, .stSelectbox label, 
+    .stRadio label, .stCheckbox label, .stDateInput label {
+        font-size: 22px !important; 
+        font-weight: 700 !important; 
+        color: #1e3c72 !important;
+        margin-bottom: 12px !important;
+    }
+    
+    /* Input values text */
+    .stTextInput input, .stNumberInput input, .stSelectbox div[data-baseweb="select"] {
+        font-size: 20px !important;
+        font-weight: 500 !important;
     }
     
     /* Buttons */
     .stButton button { 
-        font-size: 18px; 
-        padding: 14px 28px; 
-        border-radius: 12px; 
-        font-weight: 600;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-size: 22px !important; 
+        padding: 18px 36px !important; 
+        border-radius: 15px !important; 
+        font-weight: 700 !important;
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
         border: none;
+        color: white;
+        transition: all 0.3s ease;
     }
     .stButton button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    /* Primary Button */
+    .stButton > button[kind="primary"] {
+        background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
     }
     
     /* Alerts */
     .stAlert { 
-        font-size: 20px; 
-        border-radius: 12px; 
-        padding: 20px; 
+        font-size: 22px !important; 
+        border-radius: 15px; 
+        padding: 25px; 
+        font-weight: 600;
     }
     
     /* Metrics */
     [data-testid="stMetricValue"] { 
-        font-size: 28px; 
-        color: #667eea;
+        font-size: 48px !important; 
+        font-weight: 800 !important;
+        color: #1e3c72 !important;
     }
     [data-testid="stMetricLabel"] { 
-        font-size: 14px; 
-        color: #7f8c8d;
+        font-size: 20px !important; 
+        font-weight: 700 !important;
+        color: #34495e !important;
     }
     
-    /* DataFrame */
-    .stDataFrame { 
-        font-size: 14px; 
-    }
-    
-    /* Tabs */
+    /* TABS */
     .stTabs [data-testid="stTabBarButton"] { 
-        font-size: 16px; 
-        padding: 12px 24px; 
+        font-size: 32px !important; 
+        padding: 22px 44px !important; 
+        font-weight: 800 !important;
+        background: rgba(255,255,255,0.95);
+        border-radius: 18px 18px 0 0;
+        margin-right: 10px;
+        transition: all 0.3s ease;
+        color: #1e3c72 !important;
+        letter-spacing: 1.5px;
+    }
+    .stTabs [data-testid="stTabBarButton"]:hover {
         background: white;
-        border-radius: 8px 8px 0 0;
+        transform: translateY(-4px);
+        box-shadow: 0 -6px 16px rgba(0,0,0,0.1);
+    }
+    .stTabs [data-testid="stTabBarButton"][aria-selected="true"] {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white !important;
+        box-shadow: 0 -6px 16px rgba(0,0,0,0.15);
     }
     
-    /* Header Banner */
-    .header-banner {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 40px;
-        border-radius: 20px;
-        margin-bottom: 30px;
-        text-align: center;
+    /* Tab content container */
+    .stTabs [data-testid="stTabContent"] {
+        background: white;
+        border-radius: 0 22px 22px 22px;
+        padding: 35px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     }
+    
+/* Header Banner - Violet */
+.header-banner {
+    background: linear-gradient(135deg, #8A2BE2 0%, #9932CC 100%); padding: 50px; border-radius: 20px;
+    margin-bottom: 40px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    display: flex; flex-direction: column; align-items: center;
+}
     
     /* Cards */
     .card {
-        background: white;
-        border-radius: 16px;
-        padding: 28px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        margin: 16px 0;
+        background: #f8f9fa;
+        border-radius: 20px;
+        padding: 35px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        margin: 25px 0;
+        transition: all 0.3s ease;
+        border: 1px solid #e0e6ed;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        border-color: #1e3c72;
     }
     
     /* Sidebar */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+        background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+        border-right: 2px solid #e0e6ed;
+        padding: 25px;
     }
     
-    /* Input fields */
-    .stTextInput input, .stNumberInput input, .stSelectbox div {
-        border-radius: 8px;
-        border: 2px solid #e9ecef;
+    /* DataFrame/Table - LARGER FONTS */
+    .stDataFrame {
+        font-size: 22px !important;
     }
-    .stTextInput input:focus, .stNumberInput input:focus {
-        border-color: #667eea;
+    .stDataFrame table {
+        font-size: 22px !important;
+        width: 100% !important;
     }
-    
-    /* Radio buttons */
-    .stRadio > div {
-        gap: 20px;
+    .stDataFrame th {
+        font-size: 24px !important;
+        font-weight: 800 !important;
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+        color: white !important;
+        padding: 15px !important;
+        text-align: center !important;
     }
-    
-    /* Expander */
-    .streamlit-expanderHeader {
-        background: white;
-        border-radius: 12px;
-        font-size: 18px;
-        font-weight: 600;
+    .stDataFrame td {
+        font-size: 20px !important;
+        padding: 12px !important;
+        border-bottom: 1px solid #e0e6ed !important;
+    }
+    .stDataFrame tr:hover {
+        background-color: #f0f4f8 !important;
     }
     
     /* Footer */
     .footer {
         text-align: center;
-        padding: 20px;
-        color: white;
-        font-size: 14px;
-        opacity: 0.8;
+        padding: 35px;
+        background: white;
+        border-radius: 15px;
+        margin-top: 45px;
+        border: 1px solid #e0e6ed;
+    }
+    
+    /* Info/Warning boxes */
+    [data-testid="stInfo"] {
+        background: #e3f2fd;
+        border-left: 6px solid #2196f3;
+        border-radius: 12px;
+        padding: 22px;
+        font-size: 20px;
+    }
+    
+    [data-testid="stSuccess"] {
+        background: #e8f5e9;
+        border-left: 6px solid #4caf50;
+        border-radius: 12px;
+        padding: 22px;
+        font-size: 20px;
+    }
+    
+    [data-testid="stError"] {
+        background: #ffebee;
+        border-left: 6px solid #f44336;
+        border-radius: 12px;
+        padding: 22px;
+        font-size: 20px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -238,6 +319,28 @@ FEATURE_OPTIONS = {
     'thal': {'Normal': 3, 'Fixed': 6, 'Reversible': 7}
 }
 
+# Full names for display in history table
+FULL_NAMES = {
+    'id': 'Patient ID',
+    'name': 'Patient Name',
+    'age': 'Age (years)',
+    'sex': 'Gender',
+    'trestbps': 'Blood Pressure (mmHg)',
+    'chol': 'Cholesterol (mg/dl)',
+    'cp': 'Chest Pain Type',
+    'fbs': 'Fasting Blood Sugar',
+    'restecg': 'Resting ECG Results',
+    'thalach': 'Maximum Heart Rate',
+    'exang': 'Exercise Induced Angina',
+    'oldpeak': 'ST Depression (mm)',
+    'slope': 'ST Slope',
+    'ca': 'Major Vessels (0-3)',
+    'thal': 'Thalassemia',
+    'date': 'Date & Time',
+    'doctor': 'Doctor Name',
+    'prediction': 'Prediction Result',
+    'confidence': 'Confidence (%)'
+}
 
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
@@ -256,8 +359,10 @@ def login():
     with col2:
         st.markdown("""
         <div class="header-banner">
+            <img src="https://img.freepik.com/free-vector/cardiology-concept-illustration_114360-2265.jpg" 
+                 style="width: 120px; height: 120px; border-radius: 50%; margin-bottom: 20px; object-fit: cover;">
             <h1 style="color: white; margin: 0;">Heart Disease Prediction</h1>
-            <p style="color: white; opacity: 0.9; margin: 10px 0 0 0; font-size: 20px;">
+            <p style="color: white; opacity: 0.95; margin: 15px 0 0 0; font-size: 26px; font-weight: 500;">
                 AI-Powered Detection System
             </p>
         </div>
@@ -267,8 +372,8 @@ def login():
             st.markdown("### Login Required")
             st.markdown("Please sign in to access the system")
         
-        username = st.text_input("Username", placeholder="Enter username")
-        password = st.text_input("Password", type="password", placeholder="Enter password")
+        username = st.text_input("Username", placeholder="Enter your username", key="login_username")
+        password = st.text_input("Password", type="password", placeholder="Enter your password", key="login_password")
         
         if st.button("Login", type="primary", width='stretch'):
             if username in USERS and USERS[username]['password'] == password:
@@ -280,7 +385,7 @@ def login():
                 st.error("Invalid credentials! Please check your username and password.")
         
         st.markdown("---")
-        st.caption("Default Admin: admin/admin123 | Doctor: doctor/doctor123")
+        st.caption("Default Admin: admin / admin123 | Doctor: doctor/doctor123")
 
 
 if not st.session_state.logged_in:
@@ -310,7 +415,7 @@ def predict_all_models(data):
         pred = model.predict(data_scaled)[0]
         prob = model.predict_proba(data_scaled)[0]
         results[name] = {
-            'prediction': 'Heart Disease' if pred == 1 else 'No Disease',
+            'prediction': '❤️ Heart Disease' if pred == 1 else '✅ No Disease',
             'confidence': round(max(prob) * 100, 1),
             'disease_prob': round(prob[1] * 100, 1),
             'accuracy': info['accuracy'],
@@ -323,16 +428,17 @@ def predict_all_models(data):
 # Sidebar
 with st.sidebar:
     st.markdown("""
-    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; margin-bottom: 20px;">
-        <h2 style="color: #e74c3c; margin: 0;">Heart</h2>
-        <p style="color: #7f8c8d; margin: 5px 0;">Disease AI</p>
+    <div style="text-align: center; padding: 30px; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); border-radius: 18px; margin-bottom: 30px;">
+        <div style="font-size: 56px;">❤️</div>
+        <h3 style="color: white; margin: 15px 0 8px 0;">Heart Disease</h3>
+        <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 18px;">AI Prediction System</p>
     </div>
     """, unsafe_allow_html=True)
     
-    role_badge = "Admin" if st.session_state.role == 'admin' else "Doctor"
-    st.info(f"Logged in as: **{st.session_state.username}**\n\nRole: {role_badge}")
+    role_badge = "👑 Admin" if st.session_state.role == 'admin' else "👨‍⚕️ Doctor"
+    st.info(f"**Logged in as:** {st.session_state.username}\n\n**Role:** {role_badge}")
     
-    if st.button("Logout", width='stretch'):
+    if st.button("🚪 Logout", use_container_width=True):
         st.session_state.logged_in = False
         st.session_state.username = ""
         st.session_state.role = ""
@@ -341,63 +447,69 @@ with st.sidebar:
     st.markdown("---")
     
     if st.session_state.role == 'admin':
-        with st.expander("Admin Panel"):
-            st.markdown("### Manage Users")
+        with st.expander("⚙️ Admin Panel", expanded=False):
+            st.markdown("### 👥 Manage Users")
             
             users_list = list(USERS.keys())
             selected = st.selectbox("Select User", users_list)
             
             if selected:
-                st.write(f"**Role:** {USERS[selected]['role']}")
+                st.write(f"**Role:** {USERS[selected]['role'].capitalize()}")
             
-            new_user = st.text_input("New Username")
-            new_pass = st.text_input("New Password", type="password")
+            st.markdown("---")
+            st.markdown("### ➕ Add New User")
+            
+            new_user = st.text_input("Username", placeholder="Enter username")
+            new_pass = st.text_input("Password", type="password", placeholder="Enter password")
             new_role = st.selectbox("Role", ["doctor"])
             
-            if st.button("Add User"):
+            if st.button("➕ Add User", use_container_width=True):
                 if new_user and new_pass:
                     if new_user in USERS:
-                        st.error("User already exists!")
+                        st.error("❌ User already exists!")
                     else:
                         USERS[new_user] = {'password': new_pass, 'role': new_role}
                         save_users(USERS)
-                        st.success(f"User {new_user} added!")
+                        st.success(f"✅ User {new_user} added successfully!")
                         st.rerun()
                 else:
-                    st.error("Fill all fields!")
+                    st.error("❌ Please fill all fields!")
             
             if selected and selected != 'admin':
-                if st.button("Remove User"):
+                st.markdown("---")
+                st.markdown("### 🗑️ Remove User")
+                if st.button("🗑️ Remove User", use_container_width=True):
                     del USERS[selected]
                     save_users(USERS)
-                    st.success(f"User {selected} removed!")
+                    st.success(f"✅ User {selected} removed successfully!")
                     st.rerun()
 
 
-# Main
+# Main content
 st.markdown("""
 <div class="header-banner">
-    <h1 style="color: white; margin: 0;">Heart Disease Prediction System</h1>
-    <p style="color: white; opacity: 0.9; margin: 10px 0 0 0; font-size: 18px;">
-        AI-Powered Heart Disease Detection using Machine Learning
+    <div style="font-size: 72px;">❤️</div>
+    <h1 style="color: white; margin: 10px 0 0 0;">Heart Disease Prediction System</h1>
+    <p style="color: white; opacity: 0.95; margin: 15px 0 0 0; font-size: 24px; font-weight: 500;">
+        Advanced AI-Powered Heart Disease Detection using Machine Learning
     </p>
 </div>
 """, unsafe_allow_html=True)
 
 if st.session_state.role == 'admin':
-    tabs = st.tabs(["Users", "Predict", "Compare", "Stats", "Features", "History"])
+    tabs = st.tabs(["👥 USERS", "🔮 PREDICT", "📊 COMPARE", "📈 STATS", "📋 FEATURES", "📜 HISTORY"])
     tab_u, tab1, tab2, tab3, tab4, tab5 = tabs
 else:
-    tabs = st.tabs(["Predict", "Compare", "Stats", "Features", "History"])
+    tabs = st.tabs(["🔮 PREDICT", "📊 COMPARE", "📈 STATS", "📋 FEATURES", "📜 HISTORY"])
     tab1, tab2, tab3, tab4, tab5 = tabs
 
 # User Management (Admin only)
 if st.session_state.role == 'admin':
     with tab_u:
-        st.markdown("## User Management")
-        st.markdown("Manage doctor accounts")
+        st.markdown("## 👥 User Management")
+        st.markdown("Manage doctor accounts in the system")
         
-        st.markdown("### All Users")
+        st.markdown("### 📋 All Users")
         users_data = []
         for user, info in USERS.items():
             users_data.append({
@@ -405,93 +517,98 @@ if st.session_state.role == 'admin':
                 'Role': info['role'].capitalize(),
                 'Password': info['password']
             })
-        st.dataframe(pd.DataFrame(users_data), use_container_width=True)
+        st.dataframe(pd.DataFrame(users_data), use_container_width=True, height=400)
         
         st.markdown("---")
-        st.markdown("### Add New User")
+        st.markdown("### ➕ Add New Doctor")
         
         c1, c2 = st.columns(2)
         with c1:
-            new_user = st.text_input("Username")
+            new_user = st.text_input("Username", placeholder="Enter username", key="admin_new_user")
         with c2:
-            new_pass = st.text_input("Password", type="password")
+            new_pass = st.text_input("Password", type="password", placeholder="Enter password", key="admin_new_pass")
         
-        new_role = st.selectbox("Role", ["doctor"])
+        new_role = st.selectbox("Role", ["doctor"], key="admin_role")
         
-        if st.button("Add User"):
+        if st.button("✅ Add Doctor", use_container_width=True, key="admin_add"):
             if new_user and new_pass:
                 if new_user in USERS:
-                    st.error("User already exists!")
+                    st.error("❌ User already exists!")
                 else:
                     USERS[new_user] = {'password': new_pass, 'role': new_role}
                     save_users(USERS)
-                    st.success(f"User {new_user} added!")
+                    st.success(f"✅ Doctor {new_user} added successfully!")
                     st.rerun()
             else:
-                st.error("Fill all fields!")
+                st.error("❌ Please fill all fields!")
         
         st.markdown("---")
-        st.markdown("### Remove User")
+        st.markdown("### 🗑️ Remove Doctor")
         
-        rem_user = st.selectbox("Select user to remove", [u for u in USERS.keys() if u != 'admin'])
+        rem_user = st.selectbox("Select doctor to remove", [u for u in USERS.keys() if u != 'admin'])
         
-        if st.button("Remove User"):
+        if st.button("🗑️ Remove Doctor", use_container_width=True, key="admin_remove"):
             if rem_user:
                 del USERS[rem_user]
                 save_users(USERS)
-                st.success(f"User {rem_user} removed!")
+                st.success(f"✅ Doctor {rem_user} removed successfully!")
                 st.rerun()
 
 
 # Prediction Tab
 with tab1:
+    st.markdown("## 🔮 Patient Assessment")
+    st.markdown("Enter patient information for heart disease prediction")
+    
     c1, c2 = st.columns([1, 1])
     
     with c1:
-        st.markdown('<div class="card"><h3>Patient Information</h3></div>', unsafe_allow_html=True)
+        st.markdown('<div class="card"><h3>📋 Patient Information</h3></div>', unsafe_allow_html=True)
         patient_id = f"P{str(st.session_state.patient_counter + 1).zfill(4)}"
-        patient_name = st.text_input("Patient Name", placeholder="Enter name")
-        age = st.number_input("Age", min_value=1, max_value=120, value=55, key="age_pred")
-        sex = st.radio("Sex", ["Male", "Female"], horizontal=True, key="sex_pred")
+        st.info(f"**Patient ID:** {patient_id}")
+        patient_name = st.text_input("📝 Patient Name", placeholder="Enter full name", key="pred_name")
+        age = st.number_input("🎂 Age", min_value=1, max_value=120, value=55, step=1, key="age_pred", help="Patient's age in years")
+        sex = st.radio("⚥ Sex", ["Male", "Female"], horizontal=True, key="sex_pred")
     
     with c2:
-        st.markdown('<div class="card"><h3>Medical Features</h3></div>', unsafe_allow_html=True)
+        st.markdown('<div class="card"><h3>🩺 Medical Features</h3></div>', unsafe_allow_html=True)
         
         c_bp, c_chol = st.columns(2)
         with c_bp:
-            trestbps = st.number_input("Blood Pressure (mmHg)", 94, 200, 130, key="bp_pred")
+            trestbps = st.number_input("💓 Blood Pressure (mmHg)", min_value=94, max_value=200, value=130, step=5, key="bp_pred", help="Resting blood pressure")
         with c_chol:
-            chol = st.number_input("Cholesterol (mg/dl)", 100, 600, 250, key="chol_pred")
+            chol = st.number_input("🩸 Cholesterol (mg/dl)", min_value=100, max_value=600, value=250, step=10, key="chol_pred", help="Serum cholesterol")
         
         c_cp, c_fbs = st.columns(2)
         with c_cp:
-            cp = st.selectbox("Chest Pain Type", ["Typical Angina", "Atypical Angina", "Non-anginal", "Asymptomatic"], key="cp_pred")
+            cp = st.selectbox("💔 Chest Pain Type", ["Typical Angina", "Atypical Angina", "Non-anginal", "Asymptomatic"], key="cp_pred")
         with c_fbs:
-            fbs = st.selectbox("Fasting Blood Sugar", ["<= 120 mg/dl", "> 120 mg/dl"], key="fbs_pred")
+            fbs = st.selectbox("🍬 Fasting Blood Sugar", ["<= 120 mg/dl", "> 120 mg/dl"], key="fbs_pred")
         
         c_ecg, c_hr = st.columns(2)
         with c_ecg:
-            restecg = st.selectbox("Resting ECG", ["Normal", "ST-T wave", "Left ventricular"], key="ecg_pred")
+            restecg = st.selectbox("📊 Resting ECG", ["Normal", "ST-T wave", "Left ventricular"], key="ecg_pred")
         with c_hr:
-            thalach = st.number_input("Max Heart Rate", 60, 220, 150, key="hr_pred")
+            thalach = st.number_input("💗 Max Heart Rate", min_value=60, max_value=220, value=150, step=5, key="hr_pred", help="Maximum heart rate achieved")
         
         c_ex, c_old = st.columns(2)
         with c_ex:
-            exang = st.selectbox("Exercise Angina", ["No", "Yes"], key="ex_pred")
+            exang = st.selectbox("🏃 Exercise Angina", ["No", "Yes"], key="ex_pred")
         with c_old:
-            oldpeak = st.number_input("ST Depression", 0.0, 10.0, 1.0, 0.1, key="old_pred")
+            oldpeak = st.number_input("📉 ST Depression", min_value=0.0, max_value=10.0, value=1.0, step=0.1, key="old_pred", help="ST depression induced by exercise")
         
         c_slope, c_ca = st.columns(2)
         with c_slope:
-            slope = st.selectbox("ST Slope", ["Up", "Flat", "Down"], key="slope_pred")
+            slope = st.selectbox("📈 ST Slope", ["Up", "Flat", "Down"], key="slope_pred")
         with c_ca:
-            ca = st.selectbox("Major Vessels", ["0", "1", "2", "3"], key="ca_pred")
+            ca = st.selectbox("🫀 Major Vessels", ["0", "1", "2", "3"], key="ca_pred", help="Number of major vessels colored by fluoroscopy")
         
-        c_thal = st.selectbox("Thalassemia", ["Normal", "Fixed", "Reversible"], key="thal_pred")
+        with c2:
+            thal = st.selectbox("🔬 Thalassemia", ["Normal", "Fixed", "Reversible"], key="thal_pred")
 
     st.markdown("---")
     
-    if st.button("PREDICT", type="primary", width='stretch'):
+    if st.button("🔍 PREDICT HEART DISEASE", type="primary", use_container_width=True):
         sex_val = 1 if sex == "Male" else 0
         cp_val = FEATURE_OPTIONS['cp'][cp]
         fbs_val = FEATURE_OPTIONS['fbs'][fbs]
@@ -499,7 +616,7 @@ with tab1:
         exang_val = FEATURE_OPTIONS['exang'][exang]
         slope_val = FEATURE_OPTIONS['slope'][slope]
         ca_val = FEATURE_OPTIONS['ca'][ca]
-        thal_val = FEATURE_OPTIONS['thal'][c_thal]
+        thal_val = FEATURE_OPTIONS['thal'][thal]
         
         data = [age, sex_val, cp_val, trestbps, chol, fbs_val, restecg_val, thalach, exang_val, oldpeak, slope_val, ca_val, thal_val]
         
@@ -507,7 +624,7 @@ with tab1:
         
         rec = {
             'id': patient_id,
-            'name': patient_name,
+            'name': patient_name if patient_name else "Anonymous",
             'age': age,
             'sex': sex,
             'trestbps': trestbps,
@@ -520,7 +637,7 @@ with tab1:
             'oldpeak': oldpeak,
             'slope': slope,
             'ca': ca,
-            'thal': c_thal,
+            'thal': thal,
             'date': datetime.now().strftime("%Y-%m-%d %H:%M"),
             'doctor': st.session_state.username,
             'prediction': 'Heart Disease' if pred == 1 else 'No Disease',
@@ -529,41 +646,63 @@ with tab1:
         st.session_state.history.append(rec)
         st.session_state.patient_counter += 1
         
-        if pred == 1:
-            st.error(f"**Heart Disease Detected**\n\nPatient ID: {patient_id}\n\nConfidence: {rec['confidence']}%\n\nPlease advise patient for further testing.")
-        else:
-            st.success(f"**No Heart Disease Detected**\n\nPatient ID: {patient_id}\n\nConfidence: {rec['confidence']}%\n\nPatient is healthy.")
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            if pred == 1:
+                st.error(f"""
+                ### ❌ Heart Disease Detected
+                
+                **Patient ID:** {patient_id}
+                **Patient Name:** {patient_name if patient_name else "Anonymous"}
+                **Confidence:** {rec['confidence']}%
+                
+                ⚠️ **Recommendation:** Please advise patient for immediate further testing and consultation with a cardiologist.
+                """)
+            else:
+                st.success(f"""
+                ### ✅ No Heart Disease Detected
+                
+                **Patient ID:** {patient_id}
+                **Patient Name:** {patient_name if patient_name else "Anonymous"}
+                **Confidence:** {rec['confidence']}%
+                
+                💚 **Recommendation:** Patient appears healthy. Continue regular check-ups and healthy lifestyle.
+                """)
 
 
 # Compare Tab
 with tab2:
-    st.markdown("## Model Comparison")
-    st.markdown("Compare predictions from 8 different ML models")
+    st.markdown("## 📊 Model Comparison")
+    st.markdown("Compare predictions from 4 different ML models to get comprehensive insights")
     
-    st.markdown("### Enter Patient Features")
+    st.markdown("### 🩺 Enter Patient Features")
     
     c1, c2 = st.columns(2)
     with c1:
-        age_c = st.number_input("Age", 55, key="age_cmp")
-        sex_c = st.radio("Sex", ["Male", "Female"], key="sex_cmp")
-        cp_c = st.selectbox("Chest Pain Type", ["Typical Angina", "Atypical Angina", "Non-anginal", "Asymptomatic"], key="cp_cmp")
-        trestbps_c = st.number_input("Blood Pressure", 130, key="bp_cmp")
-        chol_c = st.number_input("Cholesterol", 250, key="chol_cmp")
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+        age_c = st.number_input("🎂 Age", min_value=1, max_value=120, value=55, step=1, key="age_cmp")
+        sex_c = st.radio("⚥ Sex", ["Male", "Female"], horizontal=True, key="sex_cmp")
+        cp_c = st.selectbox("💔 Chest Pain Type", ["Typical Angina", "Atypical Angina", "Non-anginal", "Asymptomatic"], key="cp_cmp")
+        trestbps_c = st.number_input("💓 Blood Pressure (mmHg)", min_value=94, max_value=200, value=130, step=5, key="bp_cmp")
+        chol_c = st.number_input("🩸 Cholesterol (mg/dl)", min_value=100, max_value=600, value=250, step=10, key="chol_cmp")
+        st.markdown('</div>', unsafe_allow_html=True)
     with c2:
-        fbs_c = st.selectbox("Fasting Blood Sugar", ["<= 120 mg/dl", "> 120 mg/dl"], key="fbs_cmp")
-        restecg_c = st.selectbox("Resting ECG", ["Normal", "ST-T wave", "Left ventricular"], key="ecg_cmp")
-        thalach_c = st.number_input("Max Heart Rate", 150, key="hr_cmp")
-        exang_c = st.selectbox("Exercise Angina", ["No", "Yes"], key="ex_cmp")
-        oldpeak_c = st.number_input("ST Depression", 1.0, key="old_cmp")
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+        fbs_c = st.selectbox("🍬 Fasting Blood Sugar", ["<= 120 mg/dl", "> 120 mg/dl"], key="fbs_cmp")
+        restecg_c = st.selectbox("📊 Resting ECG", ["Normal", "ST-T wave", "Left ventricular"], key="ecg_cmp")
+        thalach_c = st.number_input("💗 Max Heart Rate", min_value=60, max_value=220, value=150, step=5, key="hr_cmp")
+        exang_c = st.selectbox("🏃 Exercise Angina", ["No", "Yes"], key="ex_cmp")
+        oldpeak_c = st.number_input("📉 ST Depression", min_value=0.0, max_value=10.0, value=1.0, step=0.1, key="old_cmp")
+        st.markdown('</div>', unsafe_allow_html=True)
     
     c3, c4 = st.columns(2)
     with c3:
-        slope_c = st.selectbox("ST Slope", ["Up", "Flat", "Down"], key="slope_cmp")
-        ca_c = st.selectbox("Major Vessels", ["0", "1", "2", "3"], key="ca_cmp")
+        slope_c = st.selectbox("📈 ST Slope", ["Up", "Flat", "Down"], key="slope_cmp")
+        ca_c = st.selectbox("🫀 Major Vessels", ["0", "1", "2", "3"], key="ca_cmp")
     with c4:
-        thal_c = st.selectbox("Thalassemia", ["Normal", "Fixed", "Reversible"], key="thal_cmp")
+        thal_c = st.selectbox("🔬 Thalassemia", ["Normal", "Fixed", "Reversible"], key="thal_cmp")
 
-    if st.button("Compare All Models", type="primary"):
+    if st.button("🔄 Compare All Models", type="primary", use_container_width=True):
         sex_val = 1 if sex_c == "Male" else 0
         cp_val = FEATURE_OPTIONS['cp'][cp_c]
         fbs_val = FEATURE_OPTIONS['fbs'][fbs_c]
@@ -577,19 +716,19 @@ with tab2:
         
         results = predict_all_models(data)
         
-        st.markdown("### Results")
+        st.markdown("### 📊 Model Results")
         
         for name, res in results.items():
-            with st.expander(f"{name}"):
+            with st.expander(f"🤖 {name}", expanded=False):
                 col_a, col_b, col_c = st.columns(3)
                 with col_a:
-                    st.metric("Prediction", res['prediction'])
+                    st.metric("📋 Prediction", res['prediction'])
                 with col_b:
-                    st.metric("Test Accuracy", f"{res['accuracy']*100:.1f}%")
+                    st.metric("🎯 Test Accuracy", f"{res['accuracy']*100:.1f}%")
                 with col_c:
-                    st.metric("CV Accuracy", f"{res['cv_accuracy']*100:.1f}%")
+                    st.metric("🔄 CV Accuracy", f"{res['cv_accuracy']*100:.1f}%")
         
-        st.markdown("#### Model Accuracy Comparison (10-Fold CV)")
+        st.markdown("### 📈 Model Accuracy Comparison (10-Fold CV)")
         
         models_dict, _, _ = load_all_models()
         acc_data = {'Model': list(models_dict.keys()), 
@@ -601,48 +740,58 @@ with tab2:
             x=acc_data['Model'],
             y=acc_data['Test Accuracy'],
             name='Test Accuracy',
-            marker_color='#667eea'
+            marker_color='#1e3c72',
+            text=[f"{x:.1%}" for x in acc_data['Test Accuracy']],
+            textposition='auto',
         ))
         fig.add_trace(go.Bar(
             x=acc_data['Model'],
             y=acc_data['CV Accuracy'],
             name='CV Accuracy',
-            marker_color='#e74c3c'
+            marker_color='#2a5298',
+            text=[f"{x:.1%}" for x in acc_data['CV Accuracy']],
+            textposition='auto',
         ))
         fig.update_layout(
             title="Model Accuracy Comparison",
+            title_font_size=28,
             xaxis_title="Model",
+            xaxis_title_font_size=22,
             yaxis_title="Accuracy",
+            yaxis_title_font_size=22,
             yaxis_tickformat='.0%',
-            height=400,
+            height=550,
             barmode='group',
-            plot_bgcolor='white'
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(size=18)
         )
         st.plotly_chart(fig, use_container_width=True)
 
 
 # Stats Tab
 with tab3:
-    st.markdown("## Statistics Dashboard")
+    st.markdown("## 📈 Statistics Dashboard")
+    st.markdown("View comprehensive analytics and insights from all predictions")
     
     if st.session_state.history:
         df = pd.DataFrame(st.session_state.history)
         
-        st.markdown("### Overview")
+        st.markdown("### 📊 Overview")
         c1, c2, c3, c4 = st.columns(4)
         with c1:
-            st.metric("Total Predictions", len(df))
+            st.metric("📝 Total Predictions", len(df))
         with c2:
             disease_count = len(df[df['prediction'] == 'Heart Disease'])
-            st.metric("Heart Disease", disease_count)
+            st.metric("❤️ Heart Disease Cases", disease_count)
         with c3:
             no_disease = len(df[df['prediction'] == 'No Disease'])
-            st.metric("No Disease", no_disease)
+            st.metric("✅ No Disease Cases", no_disease)
         with c4:
             avg_conf = df['confidence'].mean()
-            st.metric("Avg Confidence", f"{avg_conf:.1f}%")
+            st.metric("📊 Avg Confidence", f"{avg_conf:.1f}%")
         
-        st.markdown("### Predictions by Date")
+        st.markdown("### 📅 Predictions Over Time")
         
         df['date_only'] = pd.to_datetime(df['date']).dt.date
         date_counts = df.groupby('date_only')['prediction'].value_counts().unstack(fill_value=0)
@@ -650,141 +799,226 @@ with tab3:
         fig = go.Figure()
         fig.add_trace(go.Scatter(
             x=date_counts.index, y=date_counts.get('Heart Disease', []),
-            mode='lines+markers', name='Heart Disease', line=dict(color='#e74c3c', width=3)
+            mode='lines+markers', name='❤️ Heart Disease', 
+            line=dict(color='#e74c3c', width=5),
+            marker=dict(size=12)
         ))
         fig.add_trace(go.Scatter(
             x=date_counts.index, y=date_counts.get('No Disease', []),
-            mode='lines+markers', name='No Disease', line=dict(color='#27ae60', width=3)
+            mode='lines+markers', name='✅ No Disease', 
+            line=dict(color='#27ae60', width=5),
+            marker=dict(size=12)
         ))
         fig.update_layout(
             title="Predictions Over Time",
+            title_font_size=28,
             xaxis_title="Date",
+            xaxis_title_font_size=22,
             yaxis_title="Count",
-            height=350,
-            plot_bgcolor='white'
+            yaxis_title_font_size=22,
+            height=500,
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(size=18)
         )
         st.plotly_chart(fig, use_container_width=True)
         
-        st.markdown("### Age Distribution")
+        col_left, col_right = st.columns(2)
         
-        c5, c6 = st.columns(2)
-        with c5:
+        with col_left:
+            st.markdown("### 👤 Age Distribution")
+            
+            fig_age = go.Figure()
+            fig_age.add_trace(go.Histogram(
+                x=df['age'], nbinsx=20, 
+                marker_color='#1e3c72',
+                marker_line_color='white',
+                marker_line_width=2
+            ))
+            fig_age.update_layout(
+                title="Age Distribution of Patients",
+                title_font_size=24,
+                xaxis_title="Age (years)",
+                xaxis_title_font_size=20,
+                yaxis_title="Number of Patients",
+                yaxis_title_font_size=20,
+                height=450,
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(size=16)
+            )
+            st.plotly_chart(fig_age, use_container_width=True)
+        
+        with col_right:
+            st.markdown("### ⚥ Gender Distribution")
+            
+            gender_counts = df['sex'].value_counts()
+            fig_gender = go.Figure(go.Pie(
+                labels=gender_counts.index,
+                values=gender_counts.values,
+                hole=0.4,
+                marker=dict(colors=['#1e3c72', '#e74c3c']),
+                textfont=dict(size=18)
+            ))
+            fig_gender.update_layout(
+                title="Gender Distribution of Patients",
+                title_font_size=24,
+                height=450,
+                font=dict(size=16)
+            )
+            st.plotly_chart(fig_gender, use_container_width=True)
+        
+        st.markdown("### 📊 Detailed Statistics")
+        
+        col_stats1, col_stats2, col_stats3 = st.columns(3)
+        with col_stats1:
             avg_age = df['age'].mean()
-            st.metric("Average Age", f"{avg_age:.0f} years")
-        with c6:
-            min_age = df['age'].min()
-            max_age = df['age'].max()
-            st.metric("Age Range", f"{min_age} - {max_age}")
+            std_age = df['age'].std()
+            st.metric("Average Age", f"{avg_age:.0f} ± {std_age:.0f} years")
         
-        fig_age = go.Figure()
-        fig_age.add_trace(go.Histogram(
-            x=df['age'], nbinsx=20, marker_color='#c0392b'
-        ))
-        fig_age.update_layout(
-            title="Age Distribution",
-            xaxis_title="Age",
-            yaxis_title="Count",
-            height=300,
-            plot_bgcolor='white'
-        )
-        st.plotly_chart(fig_age, use_container_width=True)
+        with col_stats2:
+            avg_bp = df['trestbps'].mean()
+            std_bp = df['trestbps'].std()
+            st.metric("Average Blood Pressure", f"{avg_bp:.0f} ± {std_bp:.0f} mmHg")
         
-        st.markdown("### Gender Distribution")
-        
-        gender_counts = df['sex'].value_counts()
-        fig_gender = go.Figure(go.Pie(
-            labels=gender_counts.index,
-            values=gender_counts.values,
-            hole=0.4,
-            marker=dict(colors=['#667eea', '#e74c3c'])
-        ))
-        fig_gender.update_layout(
-            title="Gender Distribution",
-            height=300
-        )
-        st.plotly_chart(fig_gender, use_container_width=True)
+        with col_stats3:
+            avg_chol = df['chol'].mean()
+            std_chol = df['chol'].std()
+            st.metric("Average Cholesterol", f"{avg_chol:.0f} ± {std_chol:.0f} mg/dl")
         
     else:
-        st.info("No statistics available. Make some predictions first!")
+        st.info("📭 No statistics available. Make some predictions first!")
 
 
 # Features Tab
 with tab4:
-    st.markdown("## Feature Importance")
-    st.markdown("Top risk factors for heart disease")
+    st.markdown("## 📋 Feature Importance Analysis")
+    st.markdown("Understanding the key risk factors for heart disease")
     
     model, scaler, feature_names = load_model()
     
     if hasattr(model, 'feature_importances_'):
         importance = dict(zip(feature_names, model.feature_importances_))
-        importance = dict(sorted(importance.items(), key=lambda x: x[1], reverse=True))
+        # Use full names for display
+        importance_display = {FEATURE_LABELS.get(k, k): v for k, v in importance.items()}
+        importance_display = dict(sorted(importance_display.items(), key=lambda x: x[1], reverse=True))
         
         fig = go.Figure(go.Bar(
-            x=list(importance.values()),
-            y=list(importance.keys()),
+            x=list(importance_display.values()),
+            y=list(importance_display.keys()),
             orientation='h',
-            marker_color='#c0392b'
+            marker_color='#1e3c72',
+            marker_line_color='white',
+            marker_line_width=2,
+            text=[f"{x:.1%}" for x in importance_display.values()],
+            textposition='outside',
         ))
         fig.update_layout(
-            title="Feature Importance",
-            xaxis_title="Importance",
-            height=500,
-            font_size=14,
-            plot_bgcolor='white'
+            title="Top Risk Factors for Heart Disease",
+            title_font_size=28,
+            xaxis_title="Importance Score",
+            xaxis_title_font_size=22,
+            yaxis_title="Medical Features",
+            yaxis_title_font_size=22,
+            height=650,
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(size=18),
+            xaxis_tickformat='.0%'
         )
         st.plotly_chart(fig, use_container_width=True)
     
     st.markdown("---")
-    st.markdown("### About Model")
+    st.markdown("## 🤖 About the Model")
     st.markdown("""
-    - **Model:** Random Forest Classifier
-    - **Accuracy:** 86.7%
-    - **Features:** 13 medical indicators
-    
-    Based on Cleveland heart disease dataset.
-    """)
-
-
-# History Tab
-with tab5:
-    st.markdown("## Prediction History")
-    
-    if st.session_state.history:
-        df = pd.DataFrame(st.session_state.history)
+    <div class="card">
+        <div class="card-title">🎯 Model Specifications</div>
+        <ul style="font-size: 20px; line-height: 2.0;">
+            <li><strong>Model Type:</strong> Random Forest Classifier</li>
+            <li><strong>Overall Accuracy:</strong> 86.7%</li>
+            <li><strong>Number of Features:</strong> 13 medical indicators</li>
+            <li><strong>Training Data:</strong> Cleveland Heart Disease Dataset</li>
+            <li><strong>Validation Method:</strong> 10-Fold Cross Validation</li>
+        </ul>
         
-        st.dataframe(df, use_container_width=True)
-        
-        c1, c2 = st.columns(2)
-        with c1:
-            st.metric("Total Predictions", len(st.session_state.history))
-        with c2:
-            disease_count = sum(1 for h in st.session_state.history if h['prediction'] == 'Heart Disease')
-            st.metric("Disease Detected", disease_count)
-        
-        st.markdown("---")
-        st.markdown("### Export Data")
-        
-        csv = df.to_csv(index=False)
-        st.download_button(
-            "Download CSV",
-            csv,
-            "predictions.csv",
-            "text/csv"
-        )
-        
-        if st.button("Clear History"):
-            st.session_state.history = []
-            st.session_state.patient_counter = 0
-            st.rerun()
-    else:
-        st.info("No predictions yet!")
-
-
-st.markdown("---")
-with st.container():
-    st.markdown("""
-    <div style="text-align: center; padding: 20px; color: #667eea; font-size: 14px;">
-        <p>Heart Disease Prediction System | ML Powered</p>
-        <p>&copy; 2026 - AI Healthcare System</p>
+        <div class="card-title" style="margin-top: 35px;">📚 Key Features Explained</div>
+        <ul style="font-size: 20px; line-height: 2.0;">
+            <li><strong>Age:</strong> Patient's age in years</li>
+            <li><strong>Blood Pressure:</strong> Resting blood pressure in mmHg</li>
+            <li><strong>Cholesterol:</strong> Serum cholesterol in mg/dl</li>
+            <li><strong>Maximum Heart Rate:</strong> Maximum heart rate achieved during exercise</li>
+            <li><strong>ST Depression:</strong> ST depression induced by exercise relative to rest</li>
+            <li><strong>Major Vessels:</strong> Number of major vessels colored by fluoroscopy (0-3)</li>
+            <li><strong>Chest Pain Type:</strong> Type of chest pain experienced (Typical Angina, Atypical Angina, Non-anginal, Asymptomatic)</li>
+            <li><strong>Thalassemia:</strong> Thalassemia blood disorder type (Normal, Fixed, Reversible)</li>
+        </ul>
     </div>
     """, unsafe_allow_html=True)
+
+
+# History Tab - WITH FULL FEATURE NAMES
+with tab5:
+    st.markdown("## 📜 Prediction History")
+    st.markdown("View and manage all past predictions with complete medical details")
+    
+    if st.session_state.history:
+        # Create DataFrame with all records
+        df = pd.DataFrame(st.session_state.history)
+        
+        # Rename columns to full descriptive names
+        df_display = df.rename(columns=FULL_NAMES)
+        
+        # Reorder columns for better readability
+        column_order = ['Patient ID', 'Patient Name', 'Age (years)', 'Gender', 'Blood Pressure (mmHg)', 
+                       'Cholesterol (mg/dl)', 'Chest Pain Type', 'Fasting Blood Sugar', 
+                       'Resting ECG Results', 'Maximum Heart Rate', 'Exercise Induced Angina', 
+                       'ST Depression (mm)', 'ST Slope', 'Major Vessels (0-3)', 'Thalassemia',
+                       'Prediction Result', 'Confidence (%)', 'Date & Time', 'Doctor Name']
+        
+        df_display = df_display[[col for col in column_order if col in df_display.columns]]
+        
+        # Display the dataframe with full names
+        st.dataframe(df_display, use_container_width=True, height=500)
+        
+        # Summary metrics
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("📊 Total Predictions", len(st.session_state.history))
+        with col2:
+            disease_count = sum(1 for h in st.session_state.history if h['prediction'] == 'Heart Disease')
+            st.metric("❤️ Heart Disease Detected", disease_count)
+        with col3:
+            healthy_count = sum(1 for h in st.session_state.history if h['prediction'] == 'No Disease')
+            st.metric("✅ No Disease Detected", healthy_count)
+        
+        st.markdown("---")
+        st.markdown("### 💾 Export Data")
+        
+        # Export with full column names
+        csv = df_display.to_csv(index=False)
+        st.download_button(
+            label="📥 Download CSV Report",
+            data=csv,
+            file_name=f"heart_disease_predictions_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
+        
+        st.markdown("### 🗑️ Clear All History")
+        if st.button("⚠️ Clear All Predictions", use_container_width=True):
+            st.session_state.history = []
+            st.session_state.patient_counter = 0
+            st.success("✅ All predictions cleared successfully!")
+            st.rerun()
+    else:
+        st.info("📭 No predictions yet! Go to the Predict tab to make your first prediction.")
+
+
+# Footer
+st.markdown("---")
+st.markdown("""
+<div class="footer">
+    <p style="font-size: 18px;">❤️ Heart Disease Prediction System | Powered by Advanced AI & Machine Learning</p>
+    <p style="font-size: 16px; opacity: 0.7;">© 2026 - AI Healthcare System | All Rights Reserved</p>
+</div>
+""", unsafe_allow_html=True)
