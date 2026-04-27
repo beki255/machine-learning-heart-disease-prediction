@@ -497,11 +497,11 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 if st.session_state.role == 'admin':
-    tabs = st.tabs(["👥 USERS", "🔮 PREDICT", "📊 COMPARE", "📈 STATS", "📋 FEATURES", "📜 HISTORY"])
-    tab_u, tab1, tab2, tab3, tab4, tab5 = tabs
+    tabs = st.tabs(["USERS", "PREDICT", "COMPARE", "STATS", "FEATURES", "ANALYSIS", "HISTORY"])
+    tab_u, tab1, tab2, tab3, tab4, tab5, tab6 = tabs
 else:
-    tabs = st.tabs(["🔮 PREDICT", "📊 COMPARE", "📈 STATS", "📋 FEATURES", "📜 HISTORY"])
-    tab1, tab2, tab3, tab4, tab5 = tabs
+    tabs = st.tabs(["PREDICT", "COMPARE", "STATS", "FEATURES", "ANALYSIS", "HISTORY"])
+    tab1, tab2, tab3, tab4, tab5, tab6 = tabs
 
 # User Management (Admin only)
 if st.session_state.role == 'admin':
@@ -927,37 +927,100 @@ with tab4:
             xaxis_tickformat='.0%'
         )
         st.plotly_chart(fig, use_container_width=True)
-    
-    st.markdown("---")
-    st.markdown("## 🤖 About the Model")
-    st.markdown("""
-    <div class="card">
-        <div class="card-title">🎯 Model Specifications</div>
-        <ul style="font-size: 20px; line-height: 2.0;">
-            <li><strong>Model Type:</strong> Random Forest Classifier</li>
-            <li><strong>Overall Accuracy:</strong> 86.7%</li>
-            <li><strong>Number of Features:</strong> 13 medical indicators</li>
-            <li><strong>Training Data:</strong> Cleveland Heart Disease Dataset</li>
-            <li><strong>Validation Method:</strong> 10-Fold Cross Validation</li>
-        </ul>
-        
-        <div class="card-title" style="margin-top: 35px;">📚 Key Features Explained</div>
-        <ul style="font-size: 20px; line-height: 2.0;">
-            <li><strong>Age:</strong> Patient's age in years</li>
-            <li><strong>Blood Pressure:</strong> Resting blood pressure in mmHg</li>
-            <li><strong>Cholesterol:</strong> Serum cholesterol in mg/dl</li>
-            <li><strong>Maximum Heart Rate:</strong> Maximum heart rate achieved during exercise</li>
-            <li><strong>ST Depression:</strong> ST depression induced by exercise relative to rest</li>
-            <li><strong>Major Vessels:</strong> Number of major vessels colored by fluoroscopy (0-3)</li>
-            <li><strong>Chest Pain Type:</strong> Type of chest pain experienced (Typical Angina, Atypical Angina, Non-anginal, Asymptomatic)</li>
-            <li><strong>Thalassemia:</strong> Thalassemia blood disorder type (Normal, Fixed, Reversible)</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
 
+# Analysis Tab - Additional Graphs
+with tab5:
+    st.markdown("## Advanced Analysis")
+    st.markdown("ROC Curves, Confusion Matrix, Correlation Heatmap & Distributions")
+    
+    from sklearn.metrics import roc_curve, auc, confusion_matrix
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    import numpy as np
+    
+    df = pd.read_csv(os.path.join(PROJECT_ROOT, 'data', 'heartt_cleveland_cleaned.csv'))
+    df = df.dropna()
+    X = df.drop('target', axis=1)
+    y = df['target']
+    
+    # Train/test split for metrics
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+    
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+    
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    model.fit(X_train_scaled, y_train)
+    y_pred = model.predict(X_test_scaled)
+    y_prob = model.predict_proba(X_test_scaled)[:, 1]
+    
+    # ROC Curve
+    st.markdown("### ROC Curve")
+    fpr, tpr, thresholds = roc_curve(y_test, y_prob)
+    roc_auc = auc(fpr, tpr)
+    
+    fig_roc = go.Figure()
+    fig_roc.add_trace(go.Scatter(x=fpr, y=tpr, mode='lines', name=f'ROC (AUC = {roc_auc:.3f})', 
+                               line=dict(color='#8A2BE2', width=3)))
+    fig_roc.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode='lines', name='Random', 
+                               line=dict(color='gray', dash='dash')))
+    fig_roc.update_layout(title='Receiver Operating Characteristic (ROC) Curve',
+                          xaxis_title='False Positive Rate',
+                          yaxis_title='True Positive Rate',
+                          height=400, plot_bgcolor='white')
+    st.plotly_chart(fig_roc, use_container_width=True)
+    
+    # Confusion Matrix
+    st.markdown("### Confusion Matrix")
+    cm = confusion_matrix(y_test, y_pred)
+    
+    fig_cm = go.Figure(data=go.Heatmap(z=cm, x=['No Disease', 'Heart Disease'], 
+                                     y=['No Disease', 'Heart Disease'],
+                                     colorscale='Purples', showscale=True))
+    fig_cm.update_layout(title='Confusion Matrix',
+                        xaxis_title='Predicted',
+                        yaxis_title='Actual',
+                        height=350)
+    st.plotly_chart(fig_cm, use_container_width=True)
+    
+    # Correlation Heatmap
+    st.markdown("### Correlation Heatmap")
+    corr = df.corr()
+    
+    fig_corr = go.Figure(data=go.Heatmap(z=corr.values, x=corr.columns, y=corr.columns,
+                                       colorscale='RdBu', zmid=0))
+    fig_corr.update_layout(title='Feature Correlations',
+                        height=500, width=None)
+    st.plotly_chart(fig_corr, use_container_width=True)
+    
+    # Distributions
+    st.markdown("### Feature Distributions")
+    
+    col_d1, col_d2 = st.columns(2)
+    with col_d1:
+        st.markdown("#### Age Distribution")
+        fig_age = go.Figure()
+        fig_age.add_trace(go.Histogram(x=df['age'], nbinsx=20, name='Age',
+                                   marker_color='#8A2BE2'))
+        fig_age.update_layout(title='Age Distribution', xaxis_title='Age', 
+                      height=300, plot_bgcolor='white')
+        st.plotly_chart(fig_age, use_container_width=True)
+    
+    with col_d2:
+        st.markdown("#### Target Distribution")
+        target_counts = y.value_counts()
+        fig_target = go.Figure(go.Pie(labels=['No Disease', 'Heart Disease'],
+                                  values=target_counts.values,
+                                  hole=0.4,
+                                  marker_colors=['#27ae60', '#e74c3c']))
+        fig_target.update_layout(title='Heart Disease vs No Disease',
+                             height=300)
+        st.plotly_chart(fig_target, use_container_width=True)
 
 # History Tab - WITH FULL FEATURE NAMES
-with tab5:
+with tab6:
     st.markdown("## 📜 Prediction History")
     st.markdown("View and manage all past predictions with complete medical details")
     
