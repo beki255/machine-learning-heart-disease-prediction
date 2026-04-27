@@ -36,33 +36,135 @@ USERS = load_users()
 
 st.markdown("""
 <style>
-    .stApp { background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%); }
-    html, body { font-size: 16px; }
-    h1 { font-size: 34px; font-weight: bold; }
-    h2 { font-size: 28px; font-weight: bold; }
-    h3 { font-size: 24px; font-weight: bold; color: #c0392b; }
+    /* Main Background */
+    .stApp { 
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+    }
+    
+    html, body { 
+        font-size: 16px; 
+    }
+    
+    /* Headers */
+    h1 { 
+        font-size: 36px; 
+        font-weight: bold; 
+        color: white;
+    }
+    h2 { 
+        font-size: 28px; 
+        font-weight: bold; 
+        color: #2c3e50;
+    }
+    h3 { 
+        font-size: 24px; 
+        font-weight: bold; 
+        color: #e74c3c;
+    }
+    
+    /* Labels */
     .stTextInput label, .stNumberInput label, .stSelectbox label { 
-        font-size: 20px; font-weight: 700; color: #1a1a2e; 
+        font-size: 18px; 
+        font-weight: 600; 
+        color: #2c3e50; 
     }
+    
+    /* Buttons */
     .stButton button { 
-        font-size: 18px; padding: 14px 28px; border-radius: 10px; font-weight: 600;
+        font-size: 18px; 
+        padding: 14px 28px; 
+        border-radius: 12px; 
+        font-weight: 600;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
     }
-    .stAlert { font-size: 20px; border-radius: 12px; padding: 20px; }
-    [data-testid="stMetricValue"] { font-size: 28px; }
-    [data-testid="stMetricLabel"] { font-size: 16px; }
-    .stDataFrame { font-size: 16px; }
-    .stTabs [data-testid="stTabBarButton"] { font-size: 18px; padding: 12px 20px; }
+    .stButton button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    /* Alerts */
+    .stAlert { 
+        font-size: 20px; 
+        border-radius: 12px; 
+        padding: 20px; 
+    }
+    
+    /* Metrics */
+    [data-testid="stMetricValue"] { 
+        font-size: 28px; 
+        color: #667eea;
+    }
+    [data-testid="stMetricLabel"] { 
+        font-size: 14px; 
+        color: #7f8c8d;
+    }
+    
+    /* DataFrame */
+    .stDataFrame { 
+        font-size: 14px; 
+    }
+    
+    /* Tabs */
+    .stTabs [data-testid="stTabBarButton"] { 
+        font-size: 16px; 
+        padding: 12px 24px; 
+        background: white;
+        border-radius: 8px 8px 0 0;
+    }
+    
+    /* Header Banner */
     .header-banner {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 30px; border-radius: 16px; margin-bottom: 20px;
+        padding: 40px;
+        border-radius: 20px;
+        margin-bottom: 30px;
+        text-align: center;
     }
+    
+    /* Cards */
     .card {
-        background: white; border-radius: 16px; padding: 24px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.08); margin: 8px 0;
+        background: white;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        margin: 16px 0;
     }
-    .stat-card {
-        background: white; border-radius: 12px; padding: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;
+    
+    /* Sidebar */
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+    
+    /* Input fields */
+    .stTextInput input, .stNumberInput input, .stSelectbox div {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+    }
+    .stTextInput input:focus, .stNumberInput input:focus {
+        border-color: #667eea;
+    }
+    
+    /* Radio buttons */
+    .stRadio > div {
+        gap: 20px;
+    }
+    
+    /* Expander */
+    .streamlit-expanderHeader {
+        background: white;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    
+    /* Footer */
+    .footer {
+        text-align: center;
+        padding: 20px;
+        color: white;
+        font-size: 14px;
+        opacity: 0.8;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -155,13 +257,15 @@ def login():
         st.markdown("""
         <div class="header-banner">
             <h1 style="color: white; margin: 0;">Heart Disease Prediction</h1>
-            <p style="color: white; opacity: 0.9; margin: 10px 0 0 0;">
+            <p style="color: white; opacity: 0.9; margin: 10px 0 0 0; font-size: 20px;">
                 AI-Powered Detection System
             </p>
         </div>
         """, unsafe_allow_html=True)
         
-        st.markdown("### Login Required")
+        with st.container():
+            st.markdown("### Login Required")
+            st.markdown("Please sign in to access the system")
         
         username = st.text_input("Username", placeholder="Enter username")
         password = st.text_input("Password", type="password", placeholder="Enter password")
@@ -173,10 +277,10 @@ def login():
                 st.session_state.role = USERS[username]['role']
                 st.rerun()
             else:
-                st.error("Invalid credentials!")
+                st.error("Invalid credentials! Please check your username and password.")
         
         st.markdown("---")
-        st.caption("Admin: admin/admin123 | Doctor: doctor/doctor123")
+        st.caption("Default Admin: admin/admin123 | Doctor: doctor/doctor123")
 
 
 if not st.session_state.logged_in:
@@ -219,23 +323,16 @@ def predict_all_models(data):
 # Sidebar
 with st.sidebar:
     st.markdown("""
-    <div style="text-align: center; padding: 20px;">
+    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; margin-bottom: 20px;">
         <h2 style="color: #e74c3c; margin: 0;">Heart</h2>
         <p style="color: #7f8c8d; margin: 5px 0;">Disease AI</p>
     </div>
     """, unsafe_allow_html=True)
     
     role_badge = "Admin" if st.session_state.role == 'admin' else "Doctor"
-    st.markdown(f"""
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                padding: 12px; border-radius: 12px; color: white; text-align: center;">
-        <div style="font-size: 12px; opacity: 0.8;">Logged in as</div>
-        <div style="font-size: 16px; font-weight: bold;">{st.session_state.username}</div>
-        <div style="font-size: 14px;">{role_badge}</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.info(f"Logged in as: **{st.session_state.username}**\n\nRole: {role_badge}")
     
-    if st.button("Logout"):
+    if st.button("Logout", width='stretch'):
         st.session_state.logged_in = False
         st.session_state.username = ""
         st.session_state.role = ""
@@ -278,7 +375,14 @@ with st.sidebar:
 
 
 # Main
-st.markdown("# Heart Disease Prediction System")
+st.markdown("""
+<div class="header-banner">
+    <h1 style="color: white; margin: 0;">Heart Disease Prediction System</h1>
+    <p style="color: white; opacity: 0.9; margin: 10px 0 0 0; font-size: 18px;">
+        AI-Powered Heart Disease Detection using Machine Learning
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
 if st.session_state.role == 'admin':
     tabs = st.tabs(["Users", "Predict", "Compare", "Stats", "Features", "History"])
@@ -291,13 +395,14 @@ else:
 if st.session_state.role == 'admin':
     with tab_u:
         st.markdown("## User Management")
+        st.markdown("Manage doctor accounts")
         
         st.markdown("### All Users")
         users_data = []
         for user, info in USERS.items():
             users_data.append({
                 'Username': user,
-                'Role': info['role'],
+                'Role': info['role'].capitalize(),
                 'Password': info['password']
             })
         st.dataframe(pd.DataFrame(users_data), use_container_width=True)
@@ -425,9 +530,9 @@ with tab1:
         st.session_state.patient_counter += 1
         
         if pred == 1:
-            st.error(f"**HEART DISEASE DETECTED**\n\nConfidence: {rec['confidence']}%")
+            st.error(f"**Heart Disease Detected**\n\nPatient ID: {patient_id}\n\nConfidence: {rec['confidence']}%\n\nPlease advise patient for further testing.")
         else:
-            st.success(f"**NO HEART DISEASE**\n\nConfidence: {rec['confidence']}%")
+            st.success(f"**No Heart Disease Detected**\n\nPatient ID: {patient_id}\n\nConfidence: {rec['confidence']}%\n\nPatient is healthy.")
 
 
 # Compare Tab
@@ -676,4 +781,10 @@ with tab5:
 
 
 st.markdown("---")
-st.caption("Heart Disease Prediction System | ML Powered")
+with st.container():
+    st.markdown("""
+    <div style="text-align: center; padding: 20px; color: #667eea; font-size: 14px;">
+        <p>Heart Disease Prediction System | ML Powered</p>
+        <p>&copy; 2026 - AI Healthcare System</p>
+    </div>
+    """, unsafe_allow_html=True)
