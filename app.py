@@ -6,6 +6,8 @@ import joblib
 import plotly.graph_objects as go
 from datetime import datetime
 import json
+import io
+import base64
 
 st.set_page_config(
     page_title="Heart Disease Prediction System",
@@ -41,7 +43,7 @@ st.markdown("""
     .stApp { 
         background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
     }
-    
+            
     html, body { 
         font-size: 18px; 
     }
@@ -380,7 +382,7 @@ def login():
         username = st.text_input("Username", placeholder="Enter your username", key="login_username")
         password = st.text_input("Password", type="password", placeholder="Enter your password", key="login_password")
         
-        if st.button("Login", type="primary", width='stretch'):
+        if st.button("Login", type="primary", use_container_width=True):
             if username in USERS and USERS[username]['password'] == password:
                 st.session_state.logged_in = True
                 st.session_state.username = username
@@ -515,11 +517,11 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 if st.session_state.role == 'admin':
-    tabs = st.tabs(["USERS", "PREDICT", "COMPARE", "STATS", "FEATURES", "ANALYSIS", "HISTORY"])
-    tab_u, tab1, tab2, tab3, tab4, tab5, tab6 = tabs
+    tabs = st.tabs(["USERS", "PREDICT", "COMPARE", "STATS", "FEATURES", "ANALYSIS", "HISTORY", "BATCH"])
+    tab_u, tab1, tab2, tab3, tab4, tab5, tab6, tab_batch = tabs
 else:
-    tabs = st.tabs(["PREDICT", "COMPARE", "STATS", "FEATURES", "ANALYSIS", "HISTORY"])
-    tab1, tab2, tab3, tab4, tab5, tab6 = tabs
+    tabs = st.tabs(["PREDICT", "COMPARE", "STATS", "FEATURES", "ANALYSIS", "HISTORY", "BATCH"])
+    tab1, tab2, tab3, tab4, tab5, tab6, tab_batch = tabs
 
 # User Management (Admin only)
 if st.session_state.role == 'admin':
@@ -663,6 +665,8 @@ with tab1:
         }
         st.session_state.history.append(rec)
         st.session_state.patient_counter += 1
+        st.session_state.show_pdf = True
+        st.session_state.show_features = True
         
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
@@ -686,6 +690,57 @@ with tab1:
                 
                 💚 **Recommendation:** Patient appears healthy. Continue regular check-ups and healthy lifestyle.
                 """)
+        
+        # PDF Download
+        if st.session_state.get('show_pdf', False):
+            html_report = f"""
+            <html><body>
+            <h1>Heart Disease Prediction Report</h1>
+            <p><b>Patient:</b> {patient_name if patient_name else 'Anonymous'}</p>
+            <p><b>ID:</b> {patient_id}</p>
+            <p><b>Prediction:</b> {rec['prediction']}</p>
+            <p><b>Confidence:</b> {rec['confidence']}%</p>
+            <p><b>Doctor:</b> {st.session_state.username}</p>
+            <p><b>Date:</b> {datetime.now().strftime("%Y-%m-%d %H:%M")}</p>
+            </body></html>
+            """
+            st.download_button(
+                "📥 Download HTML Report",
+                html_report,
+                f"report_{patient_id}.html",
+                "text/html",
+                use_container_width=True,
+                key="pdf_download"
+            )
+        
+        # Feature Importance
+        if st.session_state.get('show_features', False):
+            if st.button("🔍 Show Key Prediction Factors", use_container_width=True, key="show_factors"):
+                st.session_state.show_factors = True
+            
+            if st.session_state.get('show_factors', False):
+                try:
+                    model, _, imputer, feature_names = load_model()
+                    data = [age, 1 if sex == "Male" else 0, FEATURE_OPTIONS['cp'][cp], 
+                            trestbps, chol, FEATURE_OPTIONS['fbs'][fbs], 
+                            FEATURE_OPTIONS['restecg'][restecg], thalach, 
+                            FEATURE_OPTIONS['exang'][exang], oldpeak, 
+                            FEATURE_OPTIONS['slope'][slope], 
+                            FEATURE_OPTIONS['ca'][ca], 
+                            FEATURE_OPTIONS['thal'][thal]]
+                    data_array = np.array(data).reshape(1, -1)
+                    data_imputed = imputer.transform(data_array)
+                    
+                    if hasattr(model, 'feature_importances_'):
+                        importances = model.feature_importances_
+                        st.write("### Key Factors in This Prediction")
+                        sorted_features = sorted(zip(feature_names, importances), key=lambda x: x[1], reverse=True)[:5]
+                        for fname, imp in sorted_features:
+                            st.progress(float(imp), text=f"{FEATURE_LABELS.get(fname, fname)}: {imp:.3f}")
+                    else:
+                        st.info("Model doesn't support feature importance display")
+                except Exception as e:
+                    st.error(f"Explanation failed: {str(e)}")
 
 
 # Compare Tab
@@ -1094,6 +1149,123 @@ with tab6:
     else:
         st.info("📭 No predictions yet! Go to the Predict tab to make your first prediction.")
 
+
+
+# ========== NEW FEATURES: PDF, SHAP, BATCH PREDICTION ==========
+
+def generate_pdf_report(patient_data, prediction, confidence, doctor):
+    """Generate PDF report for a prediction"""
+    html_content = f"""
+    <html>
+    <head><title>Heart Disease Prediction Report</title></head>
+    <body>
+    <h1>Heart Disease Prediction Report</h1>
+    <hr>
+    <p><b>Patient ID:</b> {patient_data.get('id', 'N/A')}</p>
+    <p><b>Patient Name:</b> {patient_data.get('name', 'Anonymous')}</p>
+    <p><b>Age:</b> {patient_data.get('age', 'N/A')}</p>
+    <p><b>Prediction:</b> {prediction}</p>
+    <p><b>Confidence:</b> {confidence}%</p>
+    <p><b>Doctor:</b> {doctor}</p>
+    <p><b>Date:</b> {datetime.now().strftime("%Y-%m-%d %H:%M")}</p>
+    <hr>
+    <p><i>This report was generated by the Heart Disease Prediction System</i></p>
+    </body>
+    </html>
+    """
+    return html_content.encode('utf-8')
+
+
+def get_shap_explanation(data, model, feature_names):
+    """Get SHAP values for a prediction"""
+    try:
+        explainer = shap.TreeExplainer(model)
+        data_array = np.array(data).reshape(1, -1)
+        shap_values = explainer.shap_values(data_array)
+        return shap_values, feature_names
+    except:
+        return None, None
+
+
+# Batch Prediction Function
+def batch_predict(uploaded_file, model, scaler, imputer, feature_names):
+    """Process batch predictions from uploaded CSV"""
+    try:
+        df = pd.read_csv(uploaded_file)
+        
+        # Check if all required features are present
+        missing_cols = [col for col in feature_names if col not in df.columns]
+        if missing_cols:
+            return None, f"Missing columns: {missing_cols}"
+        
+        # Apply imputation and scaling
+        X = df[feature_names]
+        X_imputed = imputer.transform(X)
+        X_scaled = scaler.transform(X_imputed)
+        
+        # Make predictions
+        predictions = model.predict(X_scaled)
+        probabilities = model.predict_proba(X_scaled)
+        
+        # Add results to dataframe
+        df['Prediction'] = ['Heart Disease' if p == 1 else 'No Disease' for p in predictions]
+        df['Confidence_No_Disease'] = probabilities[:, 0] * 100
+        df['Confidence_Heart_Disease'] = probabilities[:, 1] * 100
+        
+        return df, "Success"
+    except Exception as e:
+        return None, str(e)
+
+
+# Add Batch Prediction Tab to UI (if logged in as doctor or admin)
+if st.session_state.get('logged_in', False) and 'batch_tab' not in st.session_state:
+    st.session_state.batch_tab = True
+
+# Add PDF download button after prediction
+if 'show_pdf' not in st.session_state:
+    st.session_state.show_pdf = False
+
+# SHAP explanation in prediction result
+if 'shap_values' not in st.session_state:
+    st.session_state.shap_values = None
+
+# ========== END NEW FEATURES ==========
+
+
+# Batch Prediction Tab
+with tab_batch:
+    st.markdown("## 📁 Batch Prediction")
+    st.markdown("Upload a CSV file with patient data for bulk predictions")
+    
+    st.markdown("### 📋 Required Columns:")
+    st.code(", ".join(['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 
+                      'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']))
+    
+    uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+    
+    if uploaded_file is not None:
+        if st.button("🔮 Run Batch Prediction", type="primary", use_container_width=True):
+            with st.spinner("Processing..."):
+                try:
+                    model, scaler, imputer, feature_names = load_model()
+                    df, msg = batch_predict(uploaded_file, model, scaler, imputer, feature_names)
+                    
+                    if df is not None:
+                        st.success(f"✅ Processed {len(df)} patients!")
+                        st.dataframe(df, use_container_width=True)
+                        
+                        csv = df.to_csv(index=False)
+                        st.download_button(
+                            "📥 Download Results CSV",
+                            csv,
+                            f"batch_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+                            "text/csv",
+                            use_container_width=True
+                        )
+                    else:
+                        st.error(f"❌ Error: {msg}")
+                except Exception as e:
+                    st.error(f"❌ Error: {str(e)}")
 
 # Footer
 st.markdown("---")
