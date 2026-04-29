@@ -1225,8 +1225,6 @@ def generate_pdf_report(patient_data, prediction, confidence, doctor):
     """
     return html_content.encode('utf-8')
 
-
-
 def get_shap_explanation(data, model, feature_names):
     """Get SHAP values for a prediction"""
     try:
