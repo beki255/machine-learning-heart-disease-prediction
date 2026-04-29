@@ -49,8 +49,8 @@ st.markdown("""
         background: linear-gradient(rgba(138,43,226,0.85), rgba(153,50,204,0.85)), 
                     url('https://images.unsplash.com/photo-1559757148-5c350d0e053?w=1200') no-repeat center center;
         background-size: cover;
-        padding: 60px; border-radius: 20px;
-        margin-bottom: 40px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        padding: 30px; border-radius: 20px;
+        margin-bottom: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         display: flex; flex-direction: column; align-items: center;
     }
             
@@ -525,10 +525,10 @@ with open(os.path.join(PROJECT_ROOT, 'data', 'photo_2026-04-29_21-43-55.jpg'), '
 st.markdown(f"""
 <div class="header-banner" style="background: linear-gradient(rgba(138,43,226,0.85), rgba(153,50,204,0.85)), 
             url('data:image/jpeg;base64,{img_data}') no-repeat center center; 
-            background-size: cover;">
-    <div style="font-size: 72px;">❤️</div>
-    <h1 style="color: white; margin: 10px 0 0 0;">Heart Disease Prediction System</h1>
-    <p style="color: white; opacity: 0.95; margin: 15px 0 0 0; font-size: 24px; font-weight: 500;">
+            background-size: cover; padding: 25px; border-radius: 15px; margin-bottom: 25px;">
+    <div style="font-size: 40px;">❤️</div>
+    <h1 style="color: white; margin: 8px 0 0 0; font-size: 40px;">Heart Disease Prediction System</h1>
+    <p style="color: white; opacity: 0.95; margin: 10px 0 0 0; font-size: 18px; font-weight: 500;">
         Advanced AI-Powered Heart Disease Detection using Machine Learning
     </p>
 </div>
