@@ -255,8 +255,9 @@ st.markdown("""
 def load_model():
     model = joblib.load(os.path.join(PROJECT_ROOT, 'models', 'model.pkl'))
     scaler = joblib.load(os.path.join(PROJECT_ROOT, 'models', 'scaler.pkl'))
+    imputer = joblib.load(os.path.join(PROJECT_ROOT, 'models', 'imputer.pkl'))
     feature_names = joblib.load(os.path.join(PROJECT_ROOT, 'models', 'feature_names.pkl'))
-    return model, scaler, feature_names
+    return model, scaler, imputer, feature_names
 
 
 @st.cache_resource
@@ -267,12 +268,16 @@ def load_all_models():
     from sklearn.tree import DecisionTreeClassifier
     from sklearn.model_selection import train_test_split, cross_val_score
     from sklearn.preprocessing import StandardScaler
+    from sklearn.impute import SimpleImputer
     import numpy as np
     
     df = pd.read_csv(os.path.join(PROJECT_ROOT, 'data', 'heartt_cleveland_cleaned.csv'))
-    df = df.dropna()
     X = df.drop('target', axis=1)
     y = df['target']
+    
+    # Mean imputation instead of dropping rows
+    imputer = SimpleImputer(strategy='mean')
+    X = pd.DataFrame(imputer.fit_transform(X), columns=X.columns)
     
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=y
@@ -394,9 +399,10 @@ if not st.session_state.logged_in:
 
 
 def predict_single(data):
-    model, scaler, feature_names = load_model()
+    model, scaler, imputer, feature_names = load_model()
     data_array = np.array(data).reshape(1, -1)
-    data_scaled = scaler.transform(data_array)
+    data_imputed = imputer.transform(data_array)
+    data_scaled = scaler.transform(data_imputed)
     
     pred = model.predict(data_scaled)[0]
     prob = model.predict_proba(data_scaled)[0]
@@ -405,9 +411,21 @@ def predict_single(data):
 
 
 def predict_all_models(data):
+    import joblib
+    from sklearn.impute import SimpleImputer
+    import pandas as pd
+    import os
+    
     models_dict, scaler, feature_names = load_all_models()
     data_array = np.array(data).reshape(1, -1)
-    data_scaled = scaler.transform(data_array)
+    
+    # Load saved imputer and apply transform (not fit_transform)
+    imputer_path = os.path.join(PROJECT_ROOT, 'models', 'imputer.pkl')
+    imputer = joblib.load(imputer_path)
+    
+    X = pd.DataFrame(data_array, columns=feature_names)
+    X_imputed = imputer.transform(X)
+    data_scaled = scaler.transform(X_imputed)
     
     results = {}
     for name, info in models_dict.items():
@@ -895,7 +913,7 @@ with tab4:
     st.markdown("## 📋 Feature Importance Analysis")
     st.markdown("Understanding the key risk factors for heart disease")
     
-    model, scaler, feature_names = load_model()
+    model, scaler, imputer, feature_names = load_model()
     
     if hasattr(model, 'feature_importances_'):
         importance = dict(zip(feature_names, model.feature_importances_))

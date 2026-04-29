@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -11,13 +12,13 @@ import joblib
 import os
 import sys
 
+
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def load_data():
     data_path = os.path.join(PROJECT_ROOT, 'data', 'heartt_cleveland_cleaned.csv')
     df = pd.read_csv(data_path)
-    df = df.dropna()
     return df
 
 
@@ -28,8 +29,15 @@ def train_models():
     X = df.drop('target', axis=1)
     y = df['target']
     
+    # Mean imputation instead of dropping rows
+    imputer = SimpleImputer(strategy='mean')
+    X_imputed = pd.DataFrame(
+        imputer.fit_transform(X),
+        columns=X.columns
+    )
+    
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y
+        X_imputed, y, test_size=0.2, random_state=42, stratify=y
     )
     
     scaler = StandardScaler()
@@ -85,10 +93,12 @@ def train_models():
     os.makedirs(models_dir, exist_ok=True)
     joblib.dump(best_model, os.path.join(models_dir, 'model.pkl'))
     joblib.dump(scaler, os.path.join(models_dir, 'scaler.pkl'))
+    joblib.dump(imputer, os.path.join(models_dir, 'imputer.pkl'))
     joblib.dump(X.columns.tolist(), os.path.join(models_dir, 'feature_names.pkl'))
     
     print("\nModel saved to: models/model.pkl")
     print("Scaler saved to: models/scaler.pkl")
+    print("Imputer saved to: models/imputer.pkl")
     
     return best_model_name, results
 

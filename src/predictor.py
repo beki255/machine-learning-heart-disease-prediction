@@ -9,21 +9,26 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 class HeartDiseasePredictor:
     def __init__(self, model_path=None, 
                  scaler_path=None,
+                 imputer_path=None,
                  features_path=None):
         if model_path is None:
             model_path = os.path.join(PROJECT_ROOT, 'models', 'model.pkl')
         if scaler_path is None:
             scaler_path = os.path.join(PROJECT_ROOT, 'models', 'scaler.pkl')
+        if imputer_path is None:
+            imputer_path = os.path.join(PROJECT_ROOT, 'models', 'imputer.pkl')
         if features_path is None:
             features_path = os.path.join(PROJECT_ROOT, 'models', 'feature_names.pkl')
         
         self.model = joblib.load(model_path)
         self.scaler = joblib.load(scaler_path)
+        self.imputer = joblib.load(imputer_path)
         self.feature_names = joblib.load(features_path)
         
     def predict(self, patient_data):
         patient_array = np.array(patient_data).reshape(1, -1)
-        patient_scaled = self.scaler.transform(patient_array)
+        patient_imputed = self.imputer.transform(patient_array)
+        patient_scaled = self.scaler.transform(patient_imputed)
         
         prediction = self.model.predict(patient_scaled)[0]
         probability = self.model.predict_proba(patient_scaled)[0]
