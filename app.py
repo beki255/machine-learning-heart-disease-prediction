@@ -1,3 +1,4 @@
+import shap
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -58,50 +59,50 @@ st.markdown("""
         font-size: 18px; 
     }
     
-    /* Headers - BETWEEN ORIGINAL AND PREVIOUS */
+    /* Headers - ORIGINAL SIZE */
     h1 { 
-        font-size: 58px !important; 
+        font-size: 52px !important; 
         font-weight: 800 !important; 
         color: #1e3c72 !important;
-        margin-bottom: 22px;
+        margin-bottom: 20px;
     }
     h2 { 
-        font-size: 44px !important; 
+        font-size: 40px !important; 
         font-weight: 700 !important; 
         color: #2c3e50 !important;
-        margin-bottom: 22px;
+        margin-bottom: 20px;
     }
     h3 { 
-        font-size: 36px !important; 
+        font-size: 32px !important; 
         font-weight: 600 !important; 
         color: #e74c3c !important;
-        margin-bottom: 17px;
+        margin-bottom: 15px;
     }
     h4 {
-        font-size: 28px !important;
+        font-size: 26px !important;
         font-weight: 600 !important;
         color: #34495e !important;
     }
     
-    /* Labels - BETWEEN */
+    /* Labels - ORIGINAL SIZE */
     .stTextInput label, .stNumberInput label, .stSelectbox label, 
     .stRadio label, .stCheckbox label, .stDateInput label {
-        font-size: 24px !important; 
+        font-size: 22px !important; 
         font-weight: 700 !important; 
         color: #1e3c72 !important;
-        margin-bottom: 13px !important;
+        margin-bottom: 12px !important;
     }
     
-    /* Input values text - BETWEEN */
+    /* Input values text - ORIGINAL */
     .stTextInput input, .stNumberInput input, .stSelectbox div[data-baseweb="select"] {
-        font-size: 22px !important;
+        font-size: 20px !important;
         font-weight: 500 !important;
     }
     
-    /* Buttons - BETWEEN */
+    /* Buttons - ORIGINAL SIZE */
     .stButton button { 
-        font-size: 24px !important; 
-        padding: 20px 40px !important; 
+        font-size: 22px !important; 
+        padding: 18px 36px !important; 
         border-radius: 15px !important; 
         font-weight: 700 !important;
         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
@@ -119,70 +120,12 @@ st.markdown("""
         background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
     }
     
-    /* Alerts - BETWEEN */
+    /* Alerts - ORIGINAL SIZE */
     .stAlert { 
-        font-size: 24px !important; 
-        border-radius: 15px; 
-        padding: 27px; 
-        font-weight: 600;
-    }
-    
-    /* Metrics - BETWEEN */
-    [data-testid="stMetricValue"] { 
-        font-size: 52px !important; 
-        font-weight: 800 !important;
-        color: #1e3c72 !important;
-    }
-    [data-testid="stMetricLabel"] { 
         font-size: 22px !important; 
-        font-weight: 700 !important;
-        color: #34495e !important;
-    }
-    
-    /* TABS - BETWEEN */
-    .stTabs [data-testid="stTabBarButton"] { 
-        font-size: 34px !important; 
-        padding: 24px 48px !important; 
-        font-weight: 800 !important;
-        background: rgba(255,255,255,0.95);
-        border-radius: 18px 18px 0 0;
-        margin-right: 10px;
-        transition: all 0.3s ease;
-        color: #1e3c72 !important;
-        letter-spacing: 1.5px;
-    }
-    
-    /* DataFrame/Table - BETWEEN */
-    .stDataFrame {
-        font-size: 25px !important;
-    }
-    .stDataFrame table {
-        font-size: 25px !important;
-        width: 100% !important;
-    }
-    .stDataFrame th {
-        font-size: 27px !important;
-        font-weight: 800 !important;
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
-        color: white !important;
-        padding: 18px !important;
-        text-align: center !important;
-    }
-    .stDataFrame td {
-        font-size: 23px !important;
-        padding: 14px !important;
-        border-bottom: 1px solid #e0e6ed !important;
-    }
-    
-    /* Footer - BETWEEN */
-    .footer {
-        text-align: center;
-        padding: 35px;
-        background: white;
-        border-radius: 15px;
-        margin-top: 45px;
-        border: 1px solid #e0e6ed;
-        font-size: 19px !important;
+        border-radius: 15px; 
+        padding: 25px; 
+        font-weight: 600;
     }
     
     /* Metrics - ORIGINAL SIZE */
