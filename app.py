@@ -373,37 +373,68 @@ if 'patient_counter' not in st.session_state:
 
 
 def login():
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.markdown("""
-        <div class="header-banner">
-            <img src="https://img.freepik.com/free-vector/cardiology-concept-illustration_114360-2265.jpg" 
-                 style="width: 120px; height: 120px; border-radius: 50%; margin-bottom: 20px; object-fit: cover;">
-            <h1 style="color: white; margin: 0;">Heart Disease Prediction</h1>
-            <p style="color: white; opacity: 0.95; margin: 15px 0 0 0; font-size: 26px; font-weight: 500;">
-                AI-Powered Detection System
+    # Encode the local image for background
+    import base64
+    with open(os.path.join(PROJECT_ROOT, 'data', 'photo_2026-04-29_21-43-55.jpg'), 'rb') as f:
+        img_data = base64.b64encode(f.read()).decode()
+    
+    if not st.session_state.get('show_login_form', False):
+        # Welcome Page with Background Image
+        st.markdown(f"""
+        <div style="background: linear-gradient(rgba(138,43,226,0.88), rgba(153,50,204,0.88)), 
+                    url('data:image/jpeg;base64,{img_data}') no-repeat center center;
+                    background-size: cover;
+                    padding: 100px 50px; border-radius: 20px; margin: 50px 0;
+                    text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+                    min-height: 500px; display: flex; flex-direction: column; justify-content: center;">
+            <div style="font-size: 120px; margin-bottom: 30px;">❤️</div>
+            <h1 style="color: white; margin: 0 0 20px 0; font-size: 72px;">Heart Disease Prediction System</h1>
+            <p style="color: white; opacity: 0.95; margin: 0; font-size: 28px; font-weight: 500;">
+                Advanced AI-Powered Heart Disease Detection using Machine Learning
+            </p>
+            <p style="color: white; opacity: 0.8; margin: 30px 0 0 0; font-size: 20px;">
+                Click the button below to access the system
             </p>
         </div>
         """, unsafe_allow_html=True)
         
-        with st.container():
-            st.markdown("### Login Required")
-            st.markdown("Please sign in to access the system")
-        
-        username = st.text_input("Username", placeholder="Enter your username", key="login_username")
-        password = st.text_input("Password", type="password", placeholder="Enter your password", key="login_password")
-        
-        if st.button("Login", type="primary", use_container_width=True):
-            if username in USERS and USERS[username]['password'] == password:
-                st.session_state.logged_in = True
-                st.session_state.username = username
-                st.session_state.role = USERS[username]['role']
-                st.rerun()
-            else:
-                st.error("Invalid credentials! Please check your username and password.")
-        
-        st.markdown("---")
-        st.caption("Default Admin: admin / admin123 | Doctor: doctor/doctor123")
+        if st.button("🔐 Login to System", type="primary", use_container_width=True):
+            st.session_state.show_login_form = True
+            st.rerun()
+    
+    else:
+        # Login Form
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.markdown("""
+            <div class="header-banner">
+                <img src="https://img.freepik.com/free-vector/cardiology-concept-illustration_114360-2265.jpg" 
+                     style="width: 120px; height: 120px; border-radius: 50%; margin-bottom: 20px; object-fit: cover;">
+                <h1 style="color: white; margin: 0;">Heart Disease Prediction</h1>
+                <p style="color: white; opacity: 0.95; margin: 15px 0 0 0; font-size: 26px; font-weight: 500;">
+                    AI-Powered Detection System
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            with st.container():
+                st.markdown("### Login Required")
+                st.markdown("Please sign in to access the system")
+            
+            username = st.text_input("Username", placeholder="Enter your username", key="login_username")
+            password = st.text_input("Password", type="password", placeholder="Enter your password", key="login_password")
+            
+            if st.button("Login", type="primary", use_container_width=True):
+                if username in USERS and USERS[username]['password'] == password:
+                    st.session_state.logged_in = True
+                    st.session_state.username = username
+                    st.session_state.role = USERS[username]['role']
+                    st.rerun()
+                else:
+                    st.error("Invalid credentials! Please check your username and password.")
+            
+            st.markdown("---")
+            st.caption("Default Admin: admin / admin123 | Doctor: doctor/doctor123")
 
 
 if not st.session_state.logged_in:
