@@ -55,53 +55,53 @@ st.markdown("""
     }
             
     html, body { 
-        font-size: 24px !important; 
+        font-size: 18px; 
     }
     
-    /* Headers */
+    /* Headers - BETWEEN ORIGINAL AND PREVIOUS */
     h1 { 
-        font-size: 64px !important; 
+        font-size: 58px !important; 
         font-weight: 800 !important; 
         color: #1e3c72 !important;
-        margin-bottom: 25px;
+        margin-bottom: 22px;
     }
     h2 { 
-        font-size: 48px !important; 
+        font-size: 44px !important; 
         font-weight: 700 !important; 
         color: #2c3e50 !important;
-        margin-bottom: 25px;
+        margin-bottom: 22px;
     }
     h3 { 
-        font-size: 40px !important; 
+        font-size: 36px !important; 
         font-weight: 600 !important; 
         color: #e74c3c !important;
-        margin-bottom: 20px;
+        margin-bottom: 17px;
     }
     h4 {
-        font-size: 32px !important;
+        font-size: 28px !important;
         font-weight: 600 !important;
         color: #34495e !important;
     }
     
-    /* Labels - MUCH LARGER */
+    /* Labels - BETWEEN */
     .stTextInput label, .stNumberInput label, .stSelectbox label, 
     .stRadio label, .stCheckbox label, .stDateInput label {
-        font-size: 28px !important; 
+        font-size: 24px !important; 
         font-weight: 700 !important; 
         color: #1e3c72 !important;
-        margin-bottom: 15px !important;
+        margin-bottom: 13px !important;
     }
     
-    /* Input values text */
+    /* Input values text - BETWEEN */
     .stTextInput input, .stNumberInput input, .stSelectbox div[data-baseweb="select"] {
-        font-size: 24px !important;
+        font-size: 22px !important;
         font-weight: 500 !important;
     }
     
-    /* Buttons - BIGGER */
+    /* Buttons - BETWEEN */
     .stButton button { 
-        font-size: 26px !important; 
-        padding: 22px 44px !important; 
+        font-size: 24px !important; 
+        padding: 20px 40px !important; 
         border-radius: 15px !important; 
         font-weight: 700 !important;
         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
@@ -119,30 +119,88 @@ st.markdown("""
         background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
     }
     
-    /* Alerts - BIGGER */
+    /* Alerts - BETWEEN */
     .stAlert { 
-        font-size: 26px !important; 
+        font-size: 24px !important; 
         border-radius: 15px; 
-        padding: 30px; 
+        padding: 27px; 
         font-weight: 600;
     }
     
-    /* Metrics - BIGGER */
+    /* Metrics - BETWEEN */
     [data-testid="stMetricValue"] { 
-        font-size: 56px !important; 
+        font-size: 52px !important; 
         font-weight: 800 !important;
         color: #1e3c72 !important;
     }
     [data-testid="stMetricLabel"] { 
-        font-size: 24px !important; 
+        font-size: 22px !important; 
         font-weight: 700 !important;
         color: #34495e !important;
     }
     
-    /* TABS - MUCH BIGGER */
+    /* TABS - BETWEEN */
     .stTabs [data-testid="stTabBarButton"] { 
-        font-size: 36px !important; 
-        padding: 26px 52px !important; 
+        font-size: 34px !important; 
+        padding: 24px 48px !important; 
+        font-weight: 800 !important;
+        background: rgba(255,255,255,0.95);
+        border-radius: 18px 18px 0 0;
+        margin-right: 10px;
+        transition: all 0.3s ease;
+        color: #1e3c72 !important;
+        letter-spacing: 1.5px;
+    }
+    
+    /* DataFrame/Table - BETWEEN */
+    .stDataFrame {
+        font-size: 25px !important;
+    }
+    .stDataFrame table {
+        font-size: 25px !important;
+        width: 100% !important;
+    }
+    .stDataFrame th {
+        font-size: 27px !important;
+        font-weight: 800 !important;
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+        color: white !important;
+        padding: 18px !important;
+        text-align: center !important;
+    }
+    .stDataFrame td {
+        font-size: 23px !important;
+        padding: 14px !important;
+        border-bottom: 1px solid #e0e6ed !important;
+    }
+    
+    /* Footer - BETWEEN */
+    .footer {
+        text-align: center;
+        padding: 35px;
+        background: white;
+        border-radius: 15px;
+        margin-top: 45px;
+        border: 1px solid #e0e6ed;
+        font-size: 19px !important;
+    }
+    
+    /* Metrics - ORIGINAL SIZE */
+    [data-testid="stMetricValue"] { 
+        font-size: 48px !important; 
+        font-weight: 800 !important;
+        color: #1e3c72 !important;
+    }
+    [data-testid="stMetricLabel"] { 
+        font-size: 20px !important; 
+        font-weight: 700 !important;
+        color: #34495e !important;
+    }
+    
+    /* TABS - ORIGINAL SIZE */
+    .stTabs [data-testid="stTabBarButton"] { 
+        font-size: 32px !important; 
+        padding: 22px 44px !important; 
         font-weight: 800 !important;
         background: rgba(255,255,255,0.95);
         border-radius: 18px 18px 0 0;
@@ -200,32 +258,32 @@ st.markdown("""
         padding: 25px;
     }
     
-    /* DataFrame/Table - MUCH LARGER FONTS */
+    /* DataFrame/Table - ORIGINAL SIZE */
     .stDataFrame {
-        font-size: 28px !important;
+        font-size: 22px !important;
     }
     .stDataFrame table {
-        font-size: 28px !important;
+        font-size: 22px !important;
         width: 100% !important;
     }
     .stDataFrame th {
-        font-size: 30px !important;
+        font-size: 24px !important;
         font-weight: 800 !important;
         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
         color: white !important;
-        padding: 20px !important;
+        padding: 15px !important;
         text-align: center !important;
     }
     .stDataFrame td {
-        font-size: 26px !important;
-        padding: 16px !important;
+        font-size: 20px !important;
+        padding: 12px !important;
         border-bottom: 1px solid #e0e6ed !important;
     }
     .stDataFrame tr:hover {
         background-color: #f0f4f8 !important;
     }
     
-    /* Footer */
+    /* Footer - ORIGINAL */
     .footer {
         text-align: center;
         padding: 35px;
@@ -233,7 +291,7 @@ st.markdown("""
         border-radius: 15px;
         margin-top: 45px;
         border: 1px solid #e0e6ed;
-        font-size: 20px !important;
+        font-size: 18px !important;
     }
     
     /* Info/Warning boxes */
@@ -384,15 +442,15 @@ def login():
         <div style="background: linear-gradient(rgba(138,43,226,0.88), rgba(153,50,204,0.88)), 
                     url('data:image/jpeg;base64,{img_data}') no-repeat center center;
                     background-size: cover;
-                    padding: 100px 50px; border-radius: 20px; margin: 50px 0;
+                    padding: 80px 50px; border-radius: 20px; margin: 30px 0;
                     text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-                    min-height: 500px; display: flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 120px; margin-bottom: 30px;">❤️</div>
-            <h1 style="color: white; margin: 0 0 20px 0; font-size: 72px;">Heart Disease Prediction System</h1>
-            <p style="color: white; opacity: 0.95; margin: 0; font-size: 28px; font-weight: 500;">
+                    min-height: 400px; display: flex; flex-direction: column; justify-content: center;">
+            <div style="font-size: 80px; margin-bottom: 20px;">❤️</div>
+            <h1 style="color: white; margin: 0 0 15px 0; font-size: 56px;">Heart Disease Prediction System</h1>
+            <p style="color: white; opacity: 0.95; margin: 0; font-size: 22px; font-weight: 500;">
                 Advanced AI-Powered Heart Disease Detection using Machine Learning
             </p>
-            <p style="color: white; opacity: 0.8; margin: 30px 0 0 0; font-size: 20px;">
+            <p style="color: white; opacity: 0.8; margin: 20px 0 0 0; font-size: 18px;">
                 Click the button below to access the system
             </p>
         </div>
@@ -409,9 +467,9 @@ def login():
             st.markdown("""
             <div class="header-banner">
                 <img src="https://img.freepik.com/free-vector/cardiology-concept-illustration_114360-2265.jpg" 
-                     style="width: 120px; height: 120px; border-radius: 50%; margin-bottom: 20px; object-fit: cover;">
-                <h1 style="color: white; margin: 0;">Heart Disease Prediction</h1>
-                <p style="color: white; opacity: 0.95; margin: 15px 0 0 0; font-size: 26px; font-weight: 500;">
+                     style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; object-fit: cover;">
+                <h1 style="color: white; margin: 0; font-size: 44px;">Heart Disease Prediction</h1>
+                <p style="color: white; opacity: 0.95; margin: 10px 0 0 0; font-size: 22px; font-weight: 500;">
                     AI-Powered Detection System
                 </p>
             </div>
