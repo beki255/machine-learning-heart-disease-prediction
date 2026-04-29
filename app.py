@@ -43,55 +43,65 @@ st.markdown("""
     .stApp { 
         background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
     }
+    
+    /* Header Banner with Background Image */
+    .header-banner {
+        background: linear-gradient(rgba(138,43,226,0.85), rgba(153,50,204,0.85)), 
+                    url('https://images.unsplash.com/photo-1559757148-5c350d0e053?w=1200') no-repeat center center;
+        background-size: cover;
+        padding: 60px; border-radius: 20px;
+        margin-bottom: 40px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        display: flex; flex-direction: column; align-items: center;
+    }
             
     html, body { 
-        font-size: 18px; 
+        font-size: 24px !important; 
     }
     
     /* Headers */
     h1 { 
-        font-size: 52px !important; 
+        font-size: 64px !important; 
         font-weight: 800 !important; 
         color: #1e3c72 !important;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
     }
     h2 { 
-        font-size: 40px !important; 
+        font-size: 48px !important; 
         font-weight: 700 !important; 
         color: #2c3e50 !important;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
     }
     h3 { 
-        font-size: 32px !important; 
+        font-size: 40px !important; 
         font-weight: 600 !important; 
         color: #e74c3c !important;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
     }
     h4 {
-        font-size: 26px !important;
+        font-size: 32px !important;
         font-weight: 600 !important;
         color: #34495e !important;
     }
     
-    /* Labels - LARGER */
+    /* Labels - MUCH LARGER */
     .stTextInput label, .stNumberInput label, .stSelectbox label, 
     .stRadio label, .stCheckbox label, .stDateInput label {
-        font-size: 22px !important; 
+        font-size: 28px !important; 
         font-weight: 700 !important; 
         color: #1e3c72 !important;
-        margin-bottom: 12px !important;
+        margin-bottom: 15px !important;
     }
     
     /* Input values text */
     .stTextInput input, .stNumberInput input, .stSelectbox div[data-baseweb="select"] {
-        font-size: 20px !important;
+        font-size: 24px !important;
         font-weight: 500 !important;
     }
     
-    /* Buttons */
+    /* Buttons - BIGGER */
     .stButton button { 
-        font-size: 22px !important; 
-        padding: 18px 36px !important; 
+        font-size: 26px !important; 
+        padding: 22px 44px !important; 
         border-radius: 15px !important; 
         font-weight: 700 !important;
         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
@@ -109,30 +119,30 @@ st.markdown("""
         background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
     }
     
-    /* Alerts */
+    /* Alerts - BIGGER */
     .stAlert { 
-        font-size: 22px !important; 
+        font-size: 26px !important; 
         border-radius: 15px; 
-        padding: 25px; 
+        padding: 30px; 
         font-weight: 600;
     }
     
-    /* Metrics */
+    /* Metrics - BIGGER */
     [data-testid="stMetricValue"] { 
-        font-size: 48px !important; 
+        font-size: 56px !important; 
         font-weight: 800 !important;
         color: #1e3c72 !important;
     }
     [data-testid="stMetricLabel"] { 
-        font-size: 20px !important; 
+        font-size: 24px !important; 
         font-weight: 700 !important;
         color: #34495e !important;
     }
     
-    /* TABS */
+    /* TABS - MUCH BIGGER */
     .stTabs [data-testid="stTabBarButton"] { 
-        font-size: 32px !important; 
-        padding: 22px 44px !important; 
+        font-size: 36px !important; 
+        padding: 26px 52px !important; 
         font-weight: 800 !important;
         background: rgba(255,255,255,0.95);
         border-radius: 18px 18px 0 0;
@@ -190,25 +200,25 @@ st.markdown("""
         padding: 25px;
     }
     
-    /* DataFrame/Table - LARGER FONTS */
+    /* DataFrame/Table - MUCH LARGER FONTS */
     .stDataFrame {
-        font-size: 22px !important;
+        font-size: 28px !important;
     }
     .stDataFrame table {
-        font-size: 22px !important;
+        font-size: 28px !important;
         width: 100% !important;
     }
     .stDataFrame th {
-        font-size: 24px !important;
+        font-size: 30px !important;
         font-weight: 800 !important;
         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
         color: white !important;
-        padding: 15px !important;
+        padding: 20px !important;
         text-align: center !important;
     }
     .stDataFrame td {
-        font-size: 20px !important;
-        padding: 12px !important;
+        font-size: 26px !important;
+        padding: 16px !important;
         border-bottom: 1px solid #e0e6ed !important;
     }
     .stDataFrame tr:hover {
@@ -223,6 +233,7 @@ st.markdown("""
         border-radius: 15px;
         margin-top: 45px;
         border: 1px solid #e0e6ed;
+        font-size: 20px !important;
     }
     
     /* Info/Warning boxes */
@@ -506,8 +517,15 @@ with st.sidebar:
 
 
 # Main content
-st.markdown("""
-<div class="header-banner">
+# Read and encode the local image
+import base64
+with open(os.path.join(PROJECT_ROOT, 'data', 'photo_2026-04-29_21-43-55.jpg'), 'rb') as f:
+    img_data = base64.b64encode(f.read()).decode()
+
+st.markdown(f"""
+<div class="header-banner" style="background: linear-gradient(rgba(138,43,226,0.85), rgba(153,50,204,0.85)), 
+            url('data:image/jpeg;base64,{img_data}') no-repeat center center; 
+            background-size: cover;">
     <div style="font-size: 72px;">❤️</div>
     <h1 style="color: white; margin: 10px 0 0 0;">Heart Disease Prediction System</h1>
     <p style="color: white; opacity: 0.95; margin: 15px 0 0 0; font-size: 24px; font-weight: 500;">
@@ -1185,7 +1203,6 @@ def get_shap_explanation(data, model, feature_names):
         return shap_values, feature_names
     except:
         return None, None
-
 
 # Batch Prediction Function
 def batch_predict(uploaded_file, model, scaler, imputer, feature_names):
