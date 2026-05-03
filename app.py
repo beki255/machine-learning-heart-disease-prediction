@@ -586,7 +586,7 @@ def login():
                        alt="Heart illustration">
                   <h1 style="color: white; margin: 0;">Heart Disease Prediction</h1>
                   <p style="color: white; opacity: 0.95; margin: 10px 0 0 0; font-weight: 500;">
-                      AI-Powered Detection System
+                      Machine Learning-Powered Detection System
                   </p>
               </div>
             """, unsafe_allow_html=True)
@@ -785,7 +785,7 @@ st.markdown(f"""
     <div style="font-size: 40px;">❤️</div>
     <h1 style="color: white; margin: 8px 0 0 0; font-size: 40px;">Heart Disease Prediction System</h1>
     <p style="color: white; opacity: 0.95; margin: 10px 0 0 0; font-size: 18px; font-weight: 500;">
-        Advanced AI-Powered Heart Disease Detection using Machine Learning
+        Advanced Machine Learning-Powered Heart Disease Detection
     </p>
 </div>
 """, unsafe_allow_html=True)
