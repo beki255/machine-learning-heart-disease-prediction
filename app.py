@@ -946,7 +946,7 @@ with tab1:
             'slope': slope,
             'ca': ca,
             'thal': thal,
-            'date': datetime.now().strftime("%Y-%m-%d %H:%M"),
+            'date': datetime.now().strftime("%m/%d/%Y %H:%M"),
             'doctor': st.session_state.username,
             'prediction': 'Heart Disease' if pred == 1 else 'No Disease',
             'confidence': round(prob_yes if pred == 1 else prob_no, 1)
