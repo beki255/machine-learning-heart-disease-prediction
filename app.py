@@ -568,7 +568,7 @@ def login():
             </div>
         </div>
 
-        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 40px;">
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 40px; justify-content: center;">
             <div class="welcome-card gradient-card" style="background: linear-gradient(135deg, rgba(220, 38, 38, 0.8) 0%, rgba(185, 28, 28, 0.8) 100%);">
                 <h4 style="margin: 0 0 12px 0;">Clinical ready</h4>
                 <p style="margin: 0;">Designed for doctors and healthcare staff with fast access to patient predictions.</p>
