@@ -10,5 +10,9 @@
   "bereket": {
     "password": "doctor",
     "role": "doctor"
+  },
+  "doctorr": {
+    "password": "doctor12",
+    "role": "doctor"
   }
 }

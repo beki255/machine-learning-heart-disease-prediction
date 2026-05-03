@@ -99,11 +99,11 @@ st.markdown("""
         font-weight: 500 !important;
     }
     
-    /* Buttons - ORIGINAL SIZE */
+    /* Buttons - Compact for header actions */
     .stButton button { 
-        font-size: 22px !important; 
-        padding: 18px 36px !important; 
-        border-radius: 15px !important; 
+        font-size: 14px !important; 
+        padding: 10px 16px !important; 
+        border-radius: 12px !important; 
         font-weight: 700 !important;
         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
         border: none;
@@ -140,10 +140,14 @@ st.markdown("""
         color: #34495e !important;
     }
     
-    /* TABS - ORIGINAL SIZE */
-    .stTabs [data-testid="stTabBarButton"] { 
-        font-size: 32px !important; 
-        padding: 22px 44px !important; 
+    /* TABS - INCREASED SIZE FOR MAIN NAVIGATION */
+    .stTabs [data-testid="stTabBarButton"],
+    button[role="tab"],
+    .stTabs button {
+        font-size: 28px !important;
+        min-height: 50px !important;
+        line-height: 1.1 !important;
+        padding: 18px 36px !important;
         font-weight: 800 !important;
         background: rgba(255,255,255,0.95);
         border-radius: 18px 18px 0 0;
@@ -152,30 +156,80 @@ st.markdown("""
         color: #1e3c72 !important;
         letter-spacing: 1.5px;
     }
-    .stTabs [data-testid="stTabBarButton"]:hover {
+    .stTabs [data-testid="stTabBarButton"]:hover,
+    button[role="tab"]:hover,
+    .stTabs button:hover {
         background: white;
         transform: translateY(-4px);
         box-shadow: 0 -6px 16px rgba(0,0,0,0.1);
     }
-    .stTabs [data-testid="stTabBarButton"][aria-selected="true"] {
+    .stTabs [data-testid="stTabBarButton"][aria-selected="true"],
+    button[role="tab"][aria-selected="true"],
+    .stTabs button[aria-selected="true"] {
         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
         color: white !important;
         box-shadow: 0 -6px 16px rgba(0,0,0,0.15);
+    }
+    .stTabs [data-testid="stTabBarButton"] span,
+    button[role="tab"] span,
+    .stTabs button span {
+        font-size: 28px !important;
     }
     
     /* Tab content container */
     .stTabs [data-testid="stTabContent"] {
         background: white;
         border-radius: 0 22px 22px 22px;
-        padding: 35px;
+        padding: 25px;
         box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     }
     
 /* Header Banner - Violet */
 .header-banner {
-    background: linear-gradient(135deg, #8A2BE2 0%, #9932CC 100%); padding: 50px; border-radius: 20px;
-    margin-bottom: 40px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    display: flex; flex-direction: column; align-items: center;
+    background: linear-gradient(135deg, #8A2BE2 0%, #9932CC 100%);
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 160px;
+}
+.header-banner img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    object-fit: cover;
+}
+.header-banner h1 {
+    font-size: 38px !important;
+}
+.header-banner p {
+    font-size: 18px !important;
+}
+.login-card {
+    max-width: 720px;
+    margin: 0 auto 30px auto;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: none;
+    background: transparent;
+}
+.login-box {
+    padding: 32px 36px 36px;
+}
+.login-box h3 {
+    margin-top: 0;
+    font-size: 28px;
+    color: #1e3c72;
+}
+.login-box p {
+    margin-bottom: 24px;
+    font-size: 18px;
+    color: #4f5b75;
 }
     
     /* Cards */
@@ -379,53 +433,168 @@ def login():
     with open(os.path.join(PROJECT_ROOT, 'data', 'photo_2026-04-29_21-43-55.jpg'), 'rb') as f:
         img_data = base64.b64encode(f.read()).decode()
     
-    if not st.session_state.get('show_login_form', False):
+    show_login = st.session_state.get('show_login_form', False)
+    show_register = st.session_state.get('show_register_form', False)
+
+    if not show_login and not show_register:
+        button_slot = st.empty()
+        with button_slot.container():
+            c1, c2 = st.columns([4, 1], gap="large")
+            with c1:
+                st.markdown(f"""
+                <div style="display: flex; align-items: center; gap: 18px; color: #1e3c72; margin-bottom: 18px;">
+                    <img src="data:image/jpeg;base64,{img_data}"
+                         style="width: 76px; height: 76px; object-fit: cover; border-radius: 50%; border: 2px solid rgba(255,255,255,0.92); box-shadow: 0 12px 30px rgba(0,0,0,0.15);" />
+                    <div>
+                        <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; opacity: 0.85;">Heart Disease AI</div>
+                        <h1 style="margin: 0; font-size: 34px; line-height: 1.05; color: #1e3c72;">Heart Disease Prediction</h1>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+            with c2:
+                col_login, col_register = st.columns(2)
+                with col_login:
+                    if st.button("🔐 Login", type="primary", use_container_width=True, key="welcome_login"):
+                        st.session_state.show_login_form = True
+                        st.session_state.show_register_form = False
+                        st.rerun()
+                with col_register:
+                    if st.button("📝 Register", type="secondary", use_container_width=True, key="welcome_register"):
+                        st.session_state.show_register_form = True
+                        st.session_state.show_login_form = False
+                        st.rerun()
+
         # Welcome Page with Background Image
         st.markdown(f"""
-        <div style="background: linear-gradient(rgba(138,43,226,0.88), rgba(153,50,204,0.88)), 
+        <div style="background: linear-gradient(135deg, rgba(30,60,114,0.92), rgba(129,59,212,0.92)), 
                     url('data:image/jpeg;base64,{img_data}') no-repeat center center;
                     background-size: cover;
-                    padding: 80px 50px; border-radius: 20px; margin: 30px 0;
-                    text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-                    min-height: 400px; display: flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 80px; margin-bottom: 20px;">❤️</div>
-            <h1 style="color: white; margin: 0 0 15px 0; font-size: 56px;">Heart Disease Prediction System</h1>
-            <p style="color: white; opacity: 0.95; margin: 0; font-size: 22px; font-weight: 500;">
-                Advanced AI-Powered Heart Disease Detection using Machine Learning
-            </p>
-            <p style="color: white; opacity: 0.8; margin: 20px 0 0 0; font-size: 18px;">
-                Click the button below to access the system
-            </p>
+                    padding: 40px 30px; border-radius: 28px; margin: 20px 0;
+                    color: white; box-shadow: 0 18px 50px rgba(0,0,0,0.18);">
+            <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 30px;">
+                <div style="flex: 1 1 460px; min-width: 320px;">
+                    <div style="font-size: 76px; line-height: 0.9; margin-bottom: 18px;">❤️</div>
+                    <h1 style="font-size: 52px; margin: 0 0 18px 0; line-height: 1.05; letter-spacing: -1px;">Smart Heart Disease Prediction for Clinicians</h1>
+                    <p style="font-size: 20px; margin: 0 0 28px 0; max-width: 720px; opacity: 0.95;">A modern healthcare assistant using machine learning that predicts cardiac risk, explains outcomes, and supports doctor workflows with batch reporting and analytics.</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+                        <div style="padding: 16px 22px; border-radius: 999px; background: rgba(255,255,255,0.14); font-weight: 700;">AI-powered predictions</div>
+                        <div style="padding: 16px 22px; border-radius: 999px; background: rgba(255,255,255,0.14); font-weight: 700;">Clinical explainability</div>
+                        <div style="padding: 16px 22px; border-radius: 999px; background: rgba(255,255,255,0.14); font-weight: 700;">Secure doctor access</div>
+                    </div>
+                </div>
+                <div style="flex: 0 0 380px; min-width: 300px; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.18); border-radius: 28px; padding: 30px; backdrop-filter: blur(10px);">
+                    <h2 style="margin: 0 0 18px 0; font-size: 26px; color: #ffffff;">Built for modern healthcare teams</h2>
+                    <ul style="margin: 0; padding-left: 20px; font-size: 16px; line-height: 1.9; opacity: 0.95;">
+                        <li>Fast, accurate heart disease risk predictions</li>
+                        <li>Doctor-friendly reports and history tracking</li>
+                        <li>Batch uploads and secure doctor access</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; padding: 20px 0;">
+            <div style="background: white; border-radius: 24px; padding: 20px; box-shadow: 0 18px 40px rgba(16, 24, 40, 0.08); color: #1f2937;">
+                <h3 style="margin-top: 0;">Predict with confidence</h3>
+                <p style="margin: 8px 0 0 0;">Use four ML models and probability scores to validate every case.</p>
+            </div>
+            <div style="background: white; border-radius: 24px; padding: 20px; box-shadow: 0 18px 40px rgba(16, 24, 40, 0.08); color: #1f2937;">
+                <h3 style="margin-top: 0;">Explore results</h3>
+                <p style="margin: 8px 0 0 0;">Compare model outputs, view statistics, and understand feature importance.</p>
+            </div>
+            <div style="background: white; border-radius: 24px; padding: 20px; box-shadow: 0 18px 40px rgba(16, 24, 40, 0.08); color: #1f2937;">
+                <h3 style="margin-top: 0;">Share reports</h3>
+                <p style="margin: 8px 0 0 0;">Download PDF/batch results and keep a clean audit trail for patients.</p>
+            </div>
+        </div>
+
+        <div style="max-width: 1200px; margin: 0 auto; padding: 20px 0;">
+            <h2 style="margin-bottom: 18px; font-size: 34px; color: #1e293b;">How it works</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px;">
+                <div style="background: #ffffff; border-radius: 24px; padding: 20px; box-shadow: 0 16px 32px rgba(15, 23, 42, 0.06);">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: #7c3aed; color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 18px;">1</div>
+                    <h4 style="margin: 0 0 12px 0;">Enter clinical features</h4>
+                    <p style="margin: 0; color: #475569;">Add patient vitals and lab values in an intuitive interface.</p>
+                </div>
+                <div style="background: #ffffff; border-radius: 24px; padding: 20px; box-shadow: 0 16px 32px rgba(15, 23, 42, 0.06);">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: #10b981; color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 18px;">2</div>
+                    <h4 style="margin: 0 0 12px 0;">Review model insights</h4>
+                    <p style="margin: 0; color: #475569;">Compare predictions, probability scores, and key feature drivers.</p>
+                </div>
+                <div style="background: #ffffff; border-radius: 24px; padding: 20px; box-shadow: 0 16px 32px rgba(15, 23, 42, 0.06);">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: #f59e0b; color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 18px;">3</div>
+                    <h4 style="margin: 0 0 12px 0;">Export reports</h4>
+                    <p style="margin: 0; color: #475569;">Download PDF or CSV summaries for patient records and follow-up care.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 18px; padding-bottom: 30px;">
+            <div style="flex: 1 1 320px; background: white; border-radius: 24px; padding: 28px; box-shadow: 0 18px 40px rgba(16, 24, 40, 0.08); color: #1f2937;">
+                <h3 style="margin-top: 0;">Trusted by doctors</h3>
+                <p style="margin: 8px 0 0 0; color: #475569;">Designed to help clinicians make faster, data-informed decisions with clear predictive insights.</p>
+            </div>
+            <div style="flex: 1 1 320px; background: #eef2ff; border-radius: 24px; padding: 28px; box-shadow: 0 18px 40px rgba(16, 24, 40, 0.04); color: #3730a3;">
+                <h3 style="margin-top: 0;">Why this works</h3>
+                <ul style="margin: 8px 0 0 0; padding-left: 20px; color: #3730a3; line-height: 1.8;">
+                    <li>Clear risk scoring and history tracking</li>
+                    <li>Robust handling of missing clinical values</li>
+                    <li>Accessible from any modern browser</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 40px;">
+            <div style="flex: 1 1 250px;
+                        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+                        border-radius: 20px;
+                        padding: 28px;
+                        color: white;
+                        box-shadow: 0 18px 50px rgba(16, 24, 40, 0.12);">
+                <h4 style="margin: 0 0 12px 0;">Clinical ready</h4>
+                <p style="margin: 0;">Designed for doctors and healthcare staff with fast access to patient predictions.</p>
+            </div>
+            <div style="flex: 1 1 250px;
+                        background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+                        border-radius: 20px;
+                        padding: 28px;
+                        color: white;
+                        box-shadow: 0 18px 50px rgba(16, 24, 40, 0.12);">
+                <h4 style="margin: 0 0 12px 0;">Data-driven</h4>
+                <p style="margin: 0;">Support clinical decisions with transparent model output and feature analysis.</p>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; font-size: 16px; color: #64748b; text-align: center; padding-bottom: 20px;">
+            <span>Secure</span>
+            <span>•</span>
+            <span>Explainable</span>
+            <span>•</span>
+            <span>Modern UI</span>
         </div>
         """, unsafe_allow_html=True)
-        
-        if st.button("🔐 Login to System", type="primary", use_container_width=True):
-            st.session_state.show_login_form = True
-            st.rerun()
-    
-    else:
+
+    elif show_login:
         # Login Form
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            st.markdown("""
-            <div class="header-banner">
-                <img src="https://img.freepik.com/free-vector/cardiology-concept-illustration_114360-2265.jpg" 
-                     style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; object-fit: cover;">
-                <h1 style="color: white; margin: 0; font-size: 44px;">Heart Disease Prediction</h1>
-                <p style="color: white; opacity: 0.95; margin: 10px 0 0 0; font-size: 22px; font-weight: 500;">
-                    AI-Powered Detection System
-                </p>
-            </div>
+            st.markdown(f"""
+            <div class="login-card">
+              <div class="header-banner">
+                  <img src="data:image/jpeg;base64,{img_data}" 
+                       style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; object-fit: cover;"
+                       alt="Heart illustration">
+                  <h1 style="color: white; margin: 0;">Heart Disease Prediction</h1>
+                  <p style="color: white; opacity: 0.95; margin: 10px 0 0 0; font-weight: 500;">
+                      AI-Powered Detection System
+                  </p>
+              </div>
             """, unsafe_allow_html=True)
-            
-            with st.container():
-                st.markdown("### Login Required")
-                st.markdown("Please sign in to access the system")
             
             username = st.text_input("Username", placeholder="Enter your username", key="login_username")
             password = st.text_input("Password", type="password", placeholder="Enter your password", key="login_password")
             
-            if st.button("Login", type="primary", use_container_width=True):
+            if st.button("Login", type="primary", use_container_width=True, key="login_submit"):
                 if username in USERS and USERS[username]['password'] == password:
                     st.session_state.logged_in = True
                     st.session_state.username = username
@@ -434,8 +603,62 @@ def login():
                 else:
                     st.error("Invalid credentials! Please check your username and password.")
             
-            st.markdown("---")
-            st.caption("Default Admin: admin / admin123 | Doctor: doctor/doctor123")
+            if st.button("← Back to Welcome", use_container_width=True, key="login_back"):
+                st.session_state.show_login_form = False
+                st.rerun()
+
+            st.markdown("""
+                  <div style="margin-top: 24px;">
+                      <hr style="border: none; border-top: 1px solid #e3e3e3; margin: 24px 0;" />
+                  </div>
+              </div>
+            """, unsafe_allow_html=True)
+
+    elif show_register:
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.markdown(f"""
+            <div class="login-card">
+              <div class="header-banner">
+                  <img src="data:image/jpeg;base64,{img_data}" 
+                       style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; object-fit: cover;"
+                       alt="Heart illustration">
+                  <h1 style="color: white; margin: 0;">Doctor Registration</h1>
+                  <p style="color: white; opacity: 0.95; margin: 10px 0 0 0; font-weight: 500;">
+                      Create your doctor account
+                  </p>
+              </div>
+            """, unsafe_allow_html=True)
+
+            reg_username = st.text_input("Username", placeholder="Enter new username", key="reg_username")
+            reg_password = st.text_input("Password", type="password", placeholder="Enter new password", key="reg_password")
+            reg_password_confirm = st.text_input("Confirm Password", type="password", placeholder="Confirm password", key="reg_password_confirm")
+
+            if st.button("Register", type="primary", use_container_width=True, key="register_submit"):
+                if not reg_username or not reg_password or not reg_password_confirm:
+                    st.error("❌ Please fill all registration fields.")
+                elif reg_password != reg_password_confirm:
+                    st.error("❌ Passwords do not match.")
+                elif reg_username in USERS:
+                    st.error("❌ Username already exists.")
+                else:
+                    USERS[reg_username] = {'password': reg_password, 'role': 'doctor'}
+                    save_users(USERS)
+                    st.success(f"✅ Doctor account created for {reg_username}. Please login below.")
+                    st.session_state.show_register_form = False
+                    st.session_state.show_login_form = True
+                    st.rerun()
+
+            if st.button("← Back to Welcome", use_container_width=True, key="register_back"):
+                st.session_state.show_register_form = False
+                st.rerun()
+
+            st.markdown("""
+                  <div style="margin-top: 24px;">
+                      <hr style="border: none; border-top: 1px solid #e3e3e3; margin: 24px 0;" />
+                  </div>
+              </div>
+            """, unsafe_allow_html=True)
 
 
 if not st.session_state.logged_in:
