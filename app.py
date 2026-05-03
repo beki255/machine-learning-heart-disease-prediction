@@ -1280,7 +1280,7 @@ with tab5:
     st.markdown("## Advanced Analysis")
     st.markdown("ROC Curves, Confusion Matrix, Correlation Heatmap & Distributions")
     
-    from sklearn.metrics import roc_curve, auc, confusion_matrix
+    from sklearn.metrics import roc_curve, auc, confusion_matrix, classification_report
     from sklearn.ensemble import RandomForestClassifier
     from sklearn.model_selection import train_test_split
     from sklearn.preprocessing import StandardScaler
@@ -1331,6 +1331,39 @@ with tab5:
                         yaxis_title='Actual',
                         height=350)
     st.plotly_chart(fig_cm, use_container_width=True)
+    
+    # Classification Report
+    st.markdown("### Classification Report")
+    report = classification_report(y_test, y_pred, target_names=['No Disease', 'Heart Disease'], output_dict=True)
+    
+    # Display as text
+    report_text = classification_report(y_test, y_pred, target_names=['No Disease', 'Heart Disease'])
+    st.code(report_text, language='text')
+    
+    # Visualize as bar chart
+    st.markdown("#### Metrics Visualization")
+    classes = ['No Disease', 'Heart Disease']
+    metrics = ['precision', 'recall', 'f1-score']
+    
+    fig_metrics = go.Figure()
+    for i, cls in enumerate(classes):
+        fig_metrics.add_trace(go.Bar(
+            name=cls,
+            x=metrics,
+            y=[report[cls][m] for m in metrics],
+            offsetgroup=i,
+            marker_color=['#1e3c72', '#8A2BE2'][i]
+        ))
+    
+    fig_metrics.update_layout(
+        title='Classification Metrics by Class',
+        xaxis_title='Metrics',
+        yaxis_title='Score',
+        barmode='group',
+        height=400,
+        plot_bgcolor='white'
+    )
+    st.plotly_chart(fig_metrics, use_container_width=True)
     
     # Correlation Heatmap
     st.markdown("### Correlation Heatmap")
