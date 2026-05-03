@@ -179,7 +179,7 @@ st.markdown("""
     /* Tab content container */
     .stTabs [data-testid="stTabContent"] {
         background: white;
-        border-radius: 0 22px 22px 22px;
+        border-radius: 0 16px 16px 16px;
         padding: 25px;
         box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     }
@@ -446,7 +446,7 @@ def login():
                     <img src="data:image/jpeg;base64,{img_data}"
                          style="width: 76px; height: 76px; object-fit: cover; border-radius: 50%; border: 2px solid rgba(255,255,255,0.92); box-shadow: 0 12px 30px rgba(0,0,0,0.15);" />
                     <div>
-                        <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; opacity: 0.85;">Heart Disease AI</div>
+                        <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; opacity: 0.85;">Heart Disease ML</div>
                         <h1 style="margin: 0; font-size: 34px; line-height: 1.05; color: #1e3c72;">Heart Disease Prediction</h1>
                     </div>
                 </div>
@@ -477,7 +477,7 @@ def login():
                     <h1 style="font-size: 52px; margin: 0 0 18px 0; line-height: 1.05; letter-spacing: -1px;">Smart Heart Disease Prediction for Clinicians</h1>
                     <p style="font-size: 20px; margin: 0 0 28px 0; max-width: 720px; opacity: 0.95;">A modern healthcare assistant using machine learning that predicts cardiac risk, explains outcomes, and supports doctor workflows with batch reporting and analytics.</p>
                     <div style="display: flex; flex-wrap: wrap; gap: 16px;">
-                        <div style="padding: 16px 22px; border-radius: 999px; background: rgba(255,255,255,0.14); font-weight: 700;">AI-powered predictions</div>
+                        <div style="padding: 16px 22px; border-radius: 999px; background: rgba(255,255,255,0.14); font-weight: 700;">ML-powered predictions</div>
                         <div style="padding: 16px 22px; border-radius: 999px; background: rgba(255,255,255,0.14); font-weight: 700;">Clinical explainability</div>
                         <div style="padding: 16px 22px; border-radius: 999px; background: rgba(255,255,255,0.14); font-weight: 700;">Secure doctor access</div>
                     </div>
@@ -780,11 +780,11 @@ with open(os.path.join(PROJECT_ROOT, 'data', 'photo_2026-04-29_21-43-55.jpg'), '
 st.markdown(f"""
 <div class="header-banner" style="background: linear-gradient(rgba(138,43,226,0.85), rgba(153,50,204,0.85)), 
             url('data:image/jpeg;base64,{img_data}') no-repeat center center; 
-            background-size: cover; padding: 30px; border-radius: 15px; margin-bottom: 25px;
+            background-size: cover; padding: 20px; border-radius: 15px; margin-bottom: 25px;
             text-align: center; display: flex; flex-direction: column; align-items: center;">
-    <div style="font-size: 48px;">❤️</div>
-    <h1 style="color: white; margin: 8px 0 0 0; font-size: 48px;">Heart Disease Prediction System</h1>
-    <p style="color: white; opacity: 0.95; margin: 10px 0 0 0; font-size: 20px; font-weight: 500;">
+    <div style="font-size: 40px;">❤️</div>
+    <h1 style="color: white; margin: 8px 0 0 0; font-size: 40px;">Heart Disease Prediction System</h1>
+    <p style="color: white; opacity: 0.95; margin: 10px 0 0 0; font-size: 18px; font-weight: 500;">
         Advanced AI-Powered Heart Disease Detection using Machine Learning
     </p>
 </div>
