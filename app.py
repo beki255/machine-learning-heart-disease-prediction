@@ -120,6 +120,30 @@ st.markdown("""
         background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
     }
     
+    /* Welcome Page Cards */
+    .welcome-card {
+        border-radius: 24px;
+        padding: 20px;
+        box-shadow: 0 18px 40px rgba(16, 24, 40, 0.08);
+        color: #1f2937;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        background: white;
+    }
+    .welcome-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 50px rgba(16, 24, 40, 0.15);
+        border-color: #8A2BE2;
+    }
+    .welcome-card.gradient-card {
+        background: inherit;
+        color: white;
+    }
+    .welcome-card.gradient-card:hover {
+        background: inherit;
+        opacity: 0.95;
+    }
+    
     /* Alerts - ORIGINAL SIZE */
     .stAlert { 
         font-size: 22px !important; 
@@ -494,15 +518,15 @@ def login():
         </div>
 
         <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; padding: 20px 0;">
-            <div style="background: white; border-radius: 24px; padding: 20px; box-shadow: 0 18px 40px rgba(16, 24, 40, 0.08); color: #1f2937;">
+            <div class="welcome-card">
                 <h3 style="margin-top: 0;">Predict with confidence</h3>
                 <p style="margin: 8px 0 0 0;">Use four ML models and probability scores to validate every case.</p>
             </div>
-            <div style="background: white; border-radius: 24px; padding: 20px; box-shadow: 0 18px 40px rgba(16, 24, 40, 0.08); color: #1f2937;">
+            <div class="welcome-card">
                 <h3 style="margin-top: 0;">Explore results</h3>
                 <p style="margin: 8px 0 0 0;">Compare model outputs, view statistics, and understand feature importance.</p>
             </div>
-            <div style="background: white; border-radius: 24px; padding: 20px; box-shadow: 0 18px 40px rgba(16, 24, 40, 0.08); color: #1f2937;">
+            <div class="welcome-card">
                 <h3 style="margin-top: 0;">Share reports</h3>
                 <p style="margin: 8px 0 0 0;">Download PDF/batch results and keep a clean audit trail for patients.</p>
             </div>
@@ -511,17 +535,17 @@ def login():
         <div style="max-width: 1200px; margin: 0 auto; padding: 20px 0;">
             <h2 style="margin-bottom: 18px; font-size: 34px; color: #1e293b;">How it works</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px;">
-                <div style="background: #ffffff; border-radius: 24px; padding: 20px; box-shadow: 0 16px 32px rgba(15, 23, 42, 0.06);">
+                <div class="welcome-card">
                     <div style="width: 50px; height: 50px; border-radius: 50%; background: #7c3aed; color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 18px;">1</div>
                     <h4 style="margin: 0 0 12px 0;">Enter clinical features</h4>
                     <p style="margin: 0; color: #475569;">Add patient vitals and lab values in an intuitive interface.</p>
                 </div>
-                <div style="background: #ffffff; border-radius: 24px; padding: 20px; box-shadow: 0 16px 32px rgba(15, 23, 42, 0.06);">
+                <div class="welcome-card">
                     <div style="width: 50px; height: 50px; border-radius: 50%; background: #10b981; color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 18px;">2</div>
                     <h4 style="margin: 0 0 12px 0;">Review model insights</h4>
                     <p style="margin: 0; color: #475569;">Compare predictions, probability scores, and key feature drivers.</p>
                 </div>
-                <div style="background: #ffffff; border-radius: 24px; padding: 20px; box-shadow: 0 16px 32px rgba(15, 23, 42, 0.06);">
+                <div class="welcome-card">
                     <div style="width: 50px; height: 50px; border-radius: 50%; background: #f59e0b; color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 18px;">3</div>
                     <h4 style="margin: 0 0 12px 0;">Export reports</h4>
                     <p style="margin: 0; color: #475569;">Download PDF or CSV summaries for patient records and follow-up care.</p>
@@ -530,11 +554,11 @@ def login():
         </div>
 
         <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 18px; padding-bottom: 30px;">
-            <div style="flex: 1 1 320px; background: white; border-radius: 24px; padding: 28px; box-shadow: 0 18px 40px rgba(16, 24, 40, 0.08); color: #1f2937;">
+            <div class="welcome-card gradient-card">
                 <h3 style="margin-top: 0;">Trusted by doctors</h3>
                 <p style="margin: 8px 0 0 0; color: #475569;">Designed to help clinicians make faster, data-informed decisions with clear predictive insights.</p>
             </div>
-            <div style="flex: 1 1 320px; background: #eef2ff; border-radius: 24px; padding: 28px; box-shadow: 0 18px 40px rgba(16, 24, 40, 0.04); color: #3730a3;">
+            <div class="welcome-card gradient-card">
                 <h3 style="margin-top: 0;">Why this works</h3>
                 <ul style="margin: 8px 0 0 0; padding-left: 20px; color: #3730a3; line-height: 1.8;">
                     <li>Clear risk scoring and history tracking</li>
@@ -545,21 +569,11 @@ def login():
         </div>
 
         <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 40px;">
-            <div style="flex: 1 1 250px;
-                        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-                        border-radius: 20px;
-                        padding: 28px;
-                        color: white;
-                        box-shadow: 0 18px 50px rgba(16, 24, 40, 0.12);">
+            <div class="welcome-card gradient-card" style="background: linear-gradient(135deg, rgba(220, 38, 38, 0.8) 0%, rgba(185, 28, 28, 0.8) 100%);">
                 <h4 style="margin: 0 0 12px 0;">Clinical ready</h4>
                 <p style="margin: 0;">Designed for doctors and healthcare staff with fast access to patient predictions.</p>
             </div>
-            <div style="flex: 1 1 250px;
-                        background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
-                        border-radius: 20px;
-                        padding: 28px;
-                        color: white;
-                        box-shadow: 0 18px 50px rgba(16, 24, 40, 0.12);">
+            <div class="welcome-card gradient-card" style="background: linear-gradient(135deg, rgba(220, 38, 38, 0.8) 0%, rgba(185, 28, 28, 0.8) 100%);">
                 <h4 style="margin: 0 0 12px 0;">Data-driven</h4>
                 <p style="margin: 0;">Support clinical decisions with transparent model output and feature analysis.</p>
             </div>
