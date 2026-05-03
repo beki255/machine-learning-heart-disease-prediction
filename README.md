@@ -1,75 +1,47 @@
 # Heart Disease Prediction System
 
-A machine learning application to predict heart disease for hospital/clinic use using the Cleveland Heart Disease dataset.
-
-## Overview
-
-This is a real-world heart disease prediction system that uses machine learning to predict whether a patient has heart disease based on 13 medical features.
+An AI-powered Streamlit app for heart disease prediction using 4 ML models with mean imputation preprocessing.
 
 ## Features
+- Login System (Admin/Doctor roles)
+- 13 Medical Features Input
+- 4 ML Models (Random Forest, Logistic Regression, SVM, Decision Tree)
+- 10-Fold Cross-Validation
+- Mean Imputation (keeps all data rows)
+- PDF/HTML Reports
+- Prediction Explainability (Top 5 features)
+- Batch Prediction (CSV upload)
+- Modern Violet UI with enlarged fonts
 
-- **Real-time Prediction**: Instant heart disease detection
-- **Statistics Dashboard**: View prediction statistics
-- **History Tracking**: Keep track of all predictions
-- **Export to CSV**: Save predictions for records
-- **User-friendly GUI**: Easy to use interface
+## Tech Stack
+Python, Streamlit, Scikit-learn, SHAP, Pandas, Plotly
 
-## Installation
+## How to Run
+1. pip install -r requirements.txt
+2. python src/train_model.py  (CRITICAL - generates imputer.pkl)
+3. streamlit run app.py
 
-```bash
-pip install -r requirements.txt
-```
-
-## Quick Start
-
-```bash
-python app.py
-```
-
-## Buttons
-
-| Button | Function |
-|--------|----------|
-| Predict | Make heart disease prediction |
-| Stats | Open statistics dashboard |
-| Clear | Reset patient form |
-| Export | Save history to CSV |
-| Clear History | Clear prediction table |
+## Login
+- admin / admin123 (full access)
+- doctor / doctor123 (prediction + reports)
 
 ## Project Structure
+- app.py - Main app (1266 lines)
+- preprocess.ipynb - Teaching notebook
+- src/train_model.py - Model training
+- src/predictor.py - Prediction class
+- data/heartt_cleveland_cleaned.csv - Dataset
+- data/photo_2026-04-29_21-43-55.jpg - Background image
 
-```
-ML PROJECT/
-├── app.py                 # Main GUI application
-├── src/
-│   ├── predictor.py      # ML prediction module
-│   └── analyze.py      # Data analysis
-├── models/              # Trained model files
-├── data/
-│   └── heartt_cleveland_cleaned.csv
-├── *.png               # Analysis charts
-└── README.md
-```
+## New Features
+- PDF/HTML Report Download
+- Key Prediction Factors Display
+- Batch Prediction Tab
+- Welcome Page with Background Image
+- Fonts Increased (between original and previous)
+- Mean Imputation (replaces dropna())
 
-## Dataset
+## Important
+**Must run 'python src/train_model.py' first** to generate imputer.pkl file!
 
-14 medical features:
-- Age, Sex
-- Chest Pain Type (1-4)
-- Resting Blood Pressure
-- Cholesterol
-- Fasting Blood Sugar
-- Resting ECG
-- Max Heart Rate
-- Exercise Induced Angina
-- ST Depression
-- ST Segment Slope
-- Major Vessels (0-4)
-- Thalassemia
-
-## Model Performance
-
-- Random Forest: ~87% accuracy
-- SVM: ~85% accuracy
-- Logistic Regression: ~83% accuracy
-- ROC-AUC: ~95%
+Built with for educational purposes

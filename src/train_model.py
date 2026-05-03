@@ -11,8 +11,6 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 import joblib
 import os
 import sys
-
-
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -101,7 +99,5 @@ def train_models():
     print("Imputer saved to: models/imputer.pkl")
     
     return best_model_name, results
-
-
 if __name__ == "__main__":
     train_models()
