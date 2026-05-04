@@ -31,8 +31,6 @@ An AI-powered Heart Disease Prediction System built with **Streamlit**, featurin
 - **Frontend**: Streamlit, Plotly
 - **Reporting**: FPDF2
 
-![Welcome Page](screenshots/welcome-page.png)
-
 ---
 
 ## 2. Dataset Description <a name="dataset"></a>
