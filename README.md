@@ -31,9 +31,11 @@ An AI-powered Heart Disease Prediction System built with **Streamlit**, featurin
 - **Frontend**: Streamlit, Plotly
 - **Reporting**: FPDF2
 
+![Welcome Page](screenshots/welcome-page.png)
+
 ---
 
-## Dataset
+## 2. Dataset Description <a name="dataset"></a>
 
 Uses the **Heart Disease Dataset** (`data/heartt_cleveland_cleaned.csv`) with 13 features:
 
@@ -172,22 +174,30 @@ C:\2018\ML\ML PROJECT\
 ## Screenshots
 
 ### Welcome Page
-*Insert screenshot of welcome page with background image*
+![Welcome Page](screenshots/welcome-page.png)
 
-### Login Page
-*Insert screenshot of login form*
+### Login Page  
+![Login Page](screenshots/login-page.png)
 
 ### Prediction Tab
-*Insert screenshot of prediction form*
+![Prediction Form](screenshots/prediction-tab.png)
+![Prediction Result](screenshots/prediction-tab2.png)
+![Prediction Result 2](screenshots/prediction-tab3.png)
+![Feature Importance](screenshots/feature-importance.png)
 
-### Model Comparison
-*Insert screenshot of "COMPARE" tab*
+### Model Comparison Tab
+![Model Comparison](screenshots/model-comparison.png)
+![Model Comparison 2](screenshots/model-comparison2.png)
+![Model Comparison 3](screenshots/model-comparison3.png)
 
 ### Analytics Dashboard
-*Insert screenshot of "ANALYSIS" tab with ROC, Confusion Matrix*
+![Analysis Tab](screenshots/analysis-tab.png)
+![Analysis Tab 2](screenshots/analysis-tab2.png)
+![Analysis Tab 3](screenshots/analysis-tab3.png)
+![Analysis Tab 4](screenshots/analysis-tab4.png)
 
-### Batch Prediction
-*Insert screenshot of "BATCH" tab*
+### Batch Prediction Tab
+![Batch Prediction](screenshots/batch-prediction.png)
 
 ---
 
