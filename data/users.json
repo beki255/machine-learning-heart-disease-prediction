@@ -14,5 +14,10 @@
   "doctorr": {
     "password": "doctor12",
     "role": "doctor"
+  },
+  "berekett": {
+    "password": "12345678",
+    "role": "doctor",
+    "status": "pending"
   }
 }

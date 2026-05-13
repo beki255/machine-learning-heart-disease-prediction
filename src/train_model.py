@@ -87,6 +87,7 @@ def train_models():
     cm = confusion_matrix(y_test, y_pred_best)
     print(cm)
     
+    
     models_dir = os.path.join(PROJECT_ROOT, 'models')
     os.makedirs(models_dir, exist_ok=True)
     joblib.dump(best_model, os.path.join(models_dir, 'model.pkl'))

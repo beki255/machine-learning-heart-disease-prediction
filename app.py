@@ -26,14 +26,50 @@ def load_users():
         with open(USERS_FILE, 'r') as f:
             return json.load(f)
     return {
-        'admin': {'password': 'admin123', 'role': 'admin'},
-        'doctor': {'password': 'doctor123', 'role': 'doctor'}
+        'admin': {'password': 'admin123', 'role': 'admin', 'status': 'approved'},
+        'doctor': {'password': 'doctor123', 'role': 'doctor', 'status': 'approved'}
     }
 
 def save_users(users):
     os.makedirs(os.path.dirname(USERS_FILE), exist_ok=True)
     with open(USERS_FILE, 'w') as f:
         json.dump(users, f, indent=2)
+
+def register_user(username, password):
+    """Register a new doctor with pending status"""
+    users = load_users()
+    if username in users:
+        return False, "Username already exists"
+    users[username] = {
+        'password': password,
+        'role': 'doctor',
+        'status': 'pending'
+    }
+    save_users(users)
+    return True, "Registration submitted. Waiting for admin approval."
+
+def approve_user(username):
+    """Approve a pending user"""
+    users = load_users()
+    if username in users and users[username]['status'] == 'pending':
+        users[username]['status'] = 'approved'
+        save_users(users)
+        return True
+    return False
+
+def reject_user(username):
+    """Reject and remove a pending user"""
+    users = load_users()
+    if username in users and users[username]['status'] == 'pending':
+        del users[username]
+        save_users(users)
+        return True
+    return False
+
+def get_pending_users():
+    """Get all pending users"""
+    users = load_users()
+    return {u: d for u, d in users.items() if d.get('status') == 'pending'}
 
 USERS = load_users()
 
@@ -610,10 +646,13 @@ def login():
             
             if st.button("Login", type="primary", use_container_width=True, key="login_submit"):
                 if username in USERS and USERS[username]['password'] == password:
-                    st.session_state.logged_in = True
-                    st.session_state.username = username
-                    st.session_state.role = USERS[username]['role']
-                    st.rerun()
+                    if USERS[username].get('status', 'approved') == 'pending':
+                        st.warning("⏳ Your account is pending admin approval. Please wait for approval.")
+                    else:
+                        st.session_state.logged_in = True
+                        st.session_state.username = username
+                        st.session_state.role = USERS[username]['role']
+                        st.rerun()
                 else:
                     st.error("Invalid credentials! Please check your username and password.")
             
@@ -653,14 +692,15 @@ def login():
                     st.error("❌ Please fill all registration fields.")
                 elif reg_password != reg_password_confirm:
                     st.error("❌ Passwords do not match.")
-                elif reg_username in USERS:
-                    st.error("❌ Username already exists.")
                 else:
-                    USERS[reg_username] = {'password': reg_password, 'role': 'doctor'}
-                    save_users(USERS)
-                    st.success(f"✅ Doctor account created for {reg_username}. Please login below.")
-                    st.session_state.show_register_form = False
-                    st.session_state.show_login_form = True
+                    success, msg = register_user(reg_username, reg_password)
+                    if success:
+                        st.success(f"✅ {msg}")
+                        st.info("An admin will review your registration. You'll be notified once approved.")
+                        st.session_state.show_register_form = False
+                        st.session_state.show_login_form = True
+                    else:
+                        st.error(f"❌ {msg}")
                     st.rerun()
 
             if st.button("← Back to Welcome", use_container_width=True, key="register_back"):
@@ -748,13 +788,37 @@ with st.sidebar:
     
     if st.session_state.role == 'admin':
         with st.expander("⚙️ Admin Panel", expanded=False):
+            # Pending Approvals Section
+            st.markdown("### ⏳ Pending Approvals")
+            pending = get_pending_users()
+            if pending:
+                for username, info in pending.items():
+                    col1, col2, col3 = st.columns([3, 1, 1])
+                    with col1:
+                        st.write(f"👤 **{username}** (Doctor)")
+                    with col2:
+                        if st.button("✅ Approve", key=f"approve_{username}"):
+                            if approve_user(username):
+                                st.success(f"Approved {username}")
+                                st.rerun()
+                    with col3:
+                        if st.button("❌ Reject", key=f"reject_{username}"):
+                            if reject_user(username):
+                                st.warning(f"Rejected {username}")
+                                st.rerun()
+            else:
+                st.info("No pending registrations")
+            
+            st.markdown("---")
             st.markdown("### 👥 Manage Users")
             
             users_list = list(USERS.keys())
             selected = st.selectbox("Select User", users_list)
             
             if selected:
-                st.write(f"**Role:** {USERS[selected]['role'].capitalize()}")
+                user_info = USERS[selected]
+                st.write(f"**Role:** {user_info['role'].capitalize()}")
+                st.write(f"**Status:** {user_info.get('status', 'approved').capitalize()}")
             
             st.markdown("---")
             st.markdown("### ➕ Add New User")
